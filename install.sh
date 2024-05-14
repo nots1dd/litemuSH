@@ -1,12 +1,8 @@
 #!/bin/bash
 
-REPO_URL="https://github.com/nots1dd/litemus"
+REPO_URL="https://github.com/nots1dd/litemus" # in case you need this
 
-# Define the path where the script will be installed
 INSTALL_DIR="~/litemus"
-
-# Define the name of the script file
-SCRIPT_NAME="install.sh"
 
 # Check if the download was successful
 if [ $? -eq 0 ]; then
@@ -31,3 +27,7 @@ else
     echo "Failed to download the script."
     exit 1
 fi
+
+
+# this is a very barebones script as there is only one executable file (main.sh)
+# in the future this will be updated accordingly
