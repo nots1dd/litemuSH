@@ -17,6 +17,10 @@
 4. Essential options like Pause, Play, Quit are implemented
 5. Other modes like `kill and return` and `silent return` are also available
 
+In terms of watt-hours consumed by the entire process, it was on average **5-8.5m/s** (seen on powertop)
+![2024-05-14_17-27-25](https://github.com/nots1dd/litemus/assets/140317709/3293cb4a-cd03-4f4d-a425-c1b2497dcf0b)
+
+
 ### INSTALLATION GUIDE
 #### NOTE: Currently this is tried and tested only on Arch Linux (6.8.9-zen1-1-zen)
 1. Building Requirements :
