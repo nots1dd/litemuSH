@@ -60,6 +60,9 @@ resume_playback() {
     status_line="${GREEN}Status: Playing${NC}"
 }
 
+display_logo() {
+    echo -e "    " "${BLUE}LITEMUS - Light Music Player\n"
+}
 
 # Function to display current song information
 display_song_info() {
@@ -73,7 +76,7 @@ display_song_info() {
     status="$3"
 
     # Display the song information
-    echo -e  "\n${GREEN}            NOW PLAYING\n" "\n${NC}$song_name by ${YELLOW}$artist${NC} (${YELLOW}$duration${NC})\n"
+    echo -e  "\n${GREEN}            NOW PLAYING\n" "\n${BLUE}$song_name${NC} by ${YELLOW}$artist${NC} (${YELLOW}$duration${NC})\n"
 }
 
 
@@ -95,14 +98,19 @@ show_smenu() {
     smenu -c -n15 -W $'\n' -q -2 "$@" -m "Select Song"
 }
 
+display_help() {
+    echo -e "${YELLOW}Pause (p) ${NC}" "${GREEN}Resume (r)${NC}" "${RED}Quit (q)" "\n${YELLOW}Kill and go back to menu (s)${NC} ${NC}Silently go back to menu (t)${NC}" "\n${BLUE}Check current position (c)${NC}"
+}
+
 # Store the selected artist in the variable "selected_artist"
 play() {
-    echo -e "    " "${BLUE}LITEMUS - Light Music Player\n"
+    display_logo
     selected_artist=$(ls *.mp3 | awk -F ' - ' '{ artist = substr($1, 1, 512); gsub(/'\''/, "_", artist); print artist }' | sort -u | smenu -c -q -n30 -W $'\n' -m "Select Artist")
     if [ "$selected_artist" = "" ]; then
         exit
     else
     clear
+    display_logo
     echo -e "${NC}You selected artist:${GREEN} $selected_artist\n"
 
     # Store the selected song in the variable "selected_song"
@@ -113,7 +121,7 @@ play() {
 
     # Clear the screen
     clear
-
+    display_logo
     # Display the thumbnail of the selected song
     cover_image=$(extract_cover "/home/s1dd/Downloads/Songs/$selected_song")
     # echo $cover_image
@@ -129,7 +137,7 @@ play() {
     # status_line="${GREEN}Status: Playing"
     # echo -e "$status_line"
 
-    echo -e "${YELLOW}Pause (p)${NC}" "${GREEN}Resume (r)${NC}" "${RED}Quit (q)${NC}" "${YELLOW}Kill and go back to menu (s)${NC}" "${NC}Silently go back to menu (t)${NC}" "${BLUE}Check current position (c)${NC}"
+    display_help
 
     # Play the selected song using ffplay in the background and store the PID
     killall ffplay >/dev/null 2>&1

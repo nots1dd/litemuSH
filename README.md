@@ -33,6 +33,8 @@ Feel free to let me know if there is an issue in any linux distro or not.
 **NOTE :: YOU SHOULD RUN THIS SCRIPT AT YOUR OWN DISCRETION, BE AWARE OF WHAT THE SCRIPT DOES AND ITS FUNCTIONALITIES BEFORE EXECUTING.**
 
 ### FUTURE
+-> Update script to accept characters like `'` and others **[priority/high]**
+
 -> To implement a queue feature first (have to initialize a songs directory as an array probably) **[priority/high]**
 
 -> Furnish the script in a tmux like environment (for a cleaner look and better tui experience) **[priority/med]**
