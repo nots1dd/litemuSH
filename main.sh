@@ -7,6 +7,7 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
+PINK='\033[1;35m'
 NC='\033[0m' # No Color
 
 # written by nots1dd
@@ -75,8 +76,13 @@ display_song_info() {
 
     status="$3"
 
+    clear
+
     # Display the song information
+    display_logo
+    viu --width 35 --height 15 ~/newtmp.png
     echo -e  "\n${GREEN}            NOW PLAYING\n" "\n${BLUE}$song_name${NC} by ${YELLOW}$artist${NC} (${YELLOW}$duration${NC})\n"
+
 }
 
 
@@ -94,12 +100,27 @@ get_duration() {
     printf "%02d:%02d\n" "$minutes" "$seconds"
 }
 
+get_lyrics() {
+    local song="$1"
+    local lyrics=$(ffprobe -v quiet -print_format json -show_entries format_tags=lyrics-XXX -of default=nw=1:nk=1 "$song" 2>/dev/null)
+    if [ "$lyrics" = "" ]; then
+        clear
+        echo -e "\nLyrics not available for this song.\n" "\nTo ${GREEN}GO BACK${NC} press ${YELLOW}u/U"
+    else
+        clear
+        echo -e "\n$1\n" "\n${PINK}$lyrics\n"
+    fi
+}
+
+
+
+
 show_smenu() {
     smenu -c -n15 -W $'\n' -q -2 "$@" -m "Select Song"
 }
 
 display_help() {
-    echo -e "${YELLOW}Pause (p) ${NC}" "${GREEN}Resume (r)${NC}" "${RED}Quit (q)" "\n${YELLOW}Kill and go back to menu (s)${NC} ${NC}Silently go back to menu (t)${NC}" "\n${BLUE}Check current position (c)${NC}"
+    echo -e "${YELLOW}Pause (p) ${NC}" "${GREEN}Resume (r)${NC}" "${RED}Quit (q)" "${NC}Lyrics (l) ${YELLOW}Go back (u)" "\n${YELLOW}Kill and go back to menu (s)${NC} ${NC}Silently go back to menu (t)${NC}" "\n${BLUE}Check current position (c)${NC}"
 }
 
 # Store the selected artist in the variable "selected_artist"
@@ -124,18 +145,13 @@ play() {
     display_logo
     # Display the thumbnail of the selected song
     cover_image=$(extract_cover "/home/s1dd/Downloads/Songs/$selected_song")
-    # echo $cover_image
-    # cover_success
     copy_to_tmp "$cover_image"
     cleanup_temp_dir "$(dirname "$cover_image")"
-    viu --width 35 --height 15 ~/newtmp.png
     # Get duration of the selected song
     duration=$(get_duration "$selected_song")
 
     # Display current song information
     display_song_info "$selected_song" "$duration"
-    # status_line="${GREEN}Status: Playing"
-    # echo -e "$status_line"
 
     display_help
 
@@ -198,6 +214,17 @@ while true; do
             else
                 status_line="${RED}No track is currently playing.${NC}"
             fi
+            ;;
+        l|L)
+            # Extract and display lyrics
+            clear
+            get_lyrics "$selected_song"
+            ;;
+        u|U)
+            clear
+            killall ffprobe >/dev/null 2>&1 # just checking something
+            display_song_info "$selected_song" "$duration"
+            display_help
             ;;
         *)
             continue
