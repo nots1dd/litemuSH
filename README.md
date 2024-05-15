@@ -8,14 +8,16 @@
 
 -> smenu [AUR PACKAGE] or [github](https://github.com/p-gen/smenu)
 
--> Common unix utils like grep, awk
+-> bc (basic calculator) [AUR PACKAGE]
+
+-> Common unix utils like grep, awk and jq
 
 ### Features (Currently)
 1. Very light weight (no bloat)
-2. Efficient extraction of a downloaded song's metadata (thumbnail, duration only for now)
+2. Efficient extraction of a downloaded song's metadata (thumbnail, duration and lyrics only for now)
 3. A basic yet clean tui to interact with
-4. Essential options like Pause, Play, Quit are implemented
-5. Other modes like `kill and return` and `silent return` are also available
+4. Essential options like Pause, Play, Quit, volume control are implemented
+5. Other modes like `kill and return` and `silent return` and `lyrics view` are also available
 
 In terms of watt-hours consumed by the entire process, it was on average **5-8.5m/s** (seen on powertop)
 ![2024-05-14_17-27-25](https://github.com/nots1dd/litemus/assets/140317709/3293cb4a-cd03-4f4d-a425-c1b2497dcf0b)
@@ -28,7 +30,7 @@ In terms of watt-hours consumed by the entire process, it was on average **5-8.5
 Since ffmpeg is a vital tool in most operating systems, and smenu can be built in virtually any unix based OS, **building** all the dependencies is not a big issue.
 Feel free to let me know if there is an issue in any linux distro or not.
 
--> `yay -S smenu ffmpeg viu grep awk bc` or just use `install.sh` to do so (install script will **NOT** install smenu as it is an AUR package so users will need yay to install)
+-> `yay -S smenu ffmpeg viu grep awk bc jq` or just use `install.sh` to do so (install script will **NOT** install smenu as it is an AUR package so users will need yay to install)
 
 NOTE :: You need to have `.mp3` files in your `~/Downloads/Songs` directory at this time. I will soon change this be user defined directory soon.
 
