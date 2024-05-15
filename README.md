@@ -27,6 +27,9 @@ In terms of watt-hours consumed by the entire process, it was on average **5-8.5
 
 Since ffmpeg is a vital tool in most operating systems, and smenu can be built in virtually any unix based OS, **building** all the dependencies is not a big issue.
 Feel free to let me know if there is an issue in any linux distro or not.
+
+NOTE :: You need to have `.mp3` files in your `~/Downloads/Songs` directory at this time. I will soon change this be user defined directory soon.
+
 -> There is no current plans for expansion of litemus outside linux (will consider macos)
 
 2. Installation :
