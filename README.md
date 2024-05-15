@@ -52,6 +52,6 @@ NOTE :: You need to have `.mp3` files in your `~/Downloads/Songs` directory at t
 
 -> With queue, previous and next play should also be implemented **[priority/high]**
 
--> Integration of spotdl [github](https://github.com/spotDL/spotify-downloader) **[priority/high]**
+-> Integration of spotdl [github](https://github.com/spotDL/spotify-downloader) **[priority/med]**
 
 -> Possibly make this an AUR package after all implementations
