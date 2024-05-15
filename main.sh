@@ -9,6 +9,7 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 PINK='\033[1;35m'
 NC='\033[0m' # No Color
+BOLD='\033[1m'
 
 # written by nots1dd
 # NOTE :: This script uses ffplay to play audio NOT PLAYERCTL
@@ -48,21 +49,40 @@ cleanup_temp_dir() {
 }
 
 # Function to pause playback
-pause_playback() {
-    # Pause the playback by sending a SIGSTOP signal to the ffplay process
-    kill -STOP "$ffplay_pid"
-    status_line="${YELLOW}Status: Paused${NC}"
+# Function to toggle playback status (pause/play)
+toggle_playback() {
+    if [[ $paused -eq 0 ]]; then
+        # If currently playing, pause playback
+        if kill -STOP "$ffplay_pid" >/dev/null 2>&1; then
+            status_line="${YELLOW}Status: Paused${NC}"
+            return 0
+        else
+            return 1
+        fi
+    else
+        # If currently paused, resume playback
+        if kill -CONT "$ffplay_pid" >/dev/null 2>&1; then
+            status_line="${GREEN}Status: Playing${NC}"
+            return 0
+        else
+            return 1
+        fi
+    fi
 }
 
-# Function to resume playback
-resume_playback() {
-    # Resume the playback by sending a SIGCONT signal to the ffplay process
-    kill -CONT "$ffplay_pid"
-    status_line="${GREEN}Status: Playing${NC}"
+
+
+
+increase_volume() {
+    amixer -q sset Master 2%+
+}
+
+decrease_volume() {
+    amixer -q sset Master 2%-
 }
 
 display_logo() {
-    echo -e "    " "${BLUE}LITEMUS - Light Music Player\n"
+    echo -e "    " "${BLUE}${BOLD}LITEMUS - Light Music Player\n"
 }
 
 # Function to display current song information
@@ -120,7 +140,7 @@ show_smenu() {
 }
 
 display_help() {
-    echo -e "${YELLOW}Pause (p) ${NC}" "${GREEN}Resume (r)${NC}" "${RED}Quit (q)" "${NC}Lyrics (l) ${YELLOW}Go back (u)" "\n${YELLOW}Kill and go back to menu (s)${NC} ${NC}Silently go back to menu (t)${NC}" "\n${BLUE}Check current position (c)${NC}"
+    echo -e "${BOLD}LITEMUS HELP" "\n${NC}->Pause/Play (p) ${NC}" "\n${NC}->Volume+ (j)${NC} ${NC}Volume- (k)${NC}" "\n${NC}->Check current position (c)${NC}" "\n${NC}->Lyrics (l) ${NC}Go back (u)" "\n${NC}->Kill and go back to menu (t)${NC} ${NC}Silently go back to menu (s)${NC}" "\n${NC}->Quit (q)\n"
 }
 
 # Store the selected artist in the variable "selected_artist"
@@ -175,27 +195,20 @@ while true; do
     read -n 1 -s key
     case $key in
         p|P)
+            toggle_playback
             if [[ $paused -eq 0 ]]; then
-                pause_playback
                 paused=1
             else
-                resume_playback
                 paused=0
             fi
             ;;
-        r|R)
-            if [[ $paused -eq 1 ]]; then
-                resume_playback
-                paused=0
-            fi
-            ;;
-        s|S)
+        t|T)
             # Return to song selection menu
             kill "$ffplay_pid" >/dev/null 2>&1
             clear
             play
             ;;
-        t|T)
+        s|S)
             # dont kill just play in bg
             echo "REDIRECTING..."
             clear
@@ -225,6 +238,12 @@ while true; do
             killall ffprobe >/dev/null 2>&1 # just checking something
             display_song_info "$selected_song" "$duration"
             display_help
+            ;;
+        j|J)
+            increase_volume
+            ;;
+        k|K)
+            decrease_volume
             ;;
         *)
             continue
