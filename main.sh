@@ -136,7 +136,7 @@ get_lyrics() {
 
 
 show_smenu() {
-    smenu -c -n15 -W $'\n' -q -2 "$@" -m "Select Song"
+    smenu -Q -c -n15 -W $'\n' -q -2 "$@" -m "Select Song"
 }
 
 display_help() {
@@ -146,7 +146,7 @@ display_help() {
 # Store the selected artist in the variable "selected_artist"
 play() {
     display_logo
-    selected_artist=$(ls *.mp3 | awk -F ' - ' '{ artist = substr($1, 1, 512); gsub(/'\''/, "_", artist); print artist }' | sort -u | smenu -c -q -n30 -W $'\n' -m "Select Artist")
+    selected_artist=$(ls *.mp3 | awk -F ' - ' '{ artist = substr($1, 1, 512); gsub(/'\''/, "_", artist); print artist }' | sort -u | smenu -Q -c -q -n30 -W $'\n' -m "Select Artist")
     if [ "$selected_artist" = "" ]; then
         exit
     else
@@ -164,7 +164,7 @@ play() {
     clear
     display_logo
     # Display the thumbnail of the selected song
-    cover_image=$(extract_cover "/home/${USER}/Downloads/Songs/$selected_song")
+    cover_image=$(extract_cover "/home/s1dd/Downloads/Songs/$selected_song")
     copy_to_tmp "$cover_image"
     cleanup_temp_dir "$(dirname "$cover_image")"
     # Get duration of the selected song
