@@ -136,7 +136,7 @@ get_lyrics() {
 
 
 show_smenu() {
-    smenu -Q -c -n15 -W $'\n' -q -2 "$@" -m "Select Song"
+    smenu -c -n15 -W $'\n' -q -2 "$@" -m "Select Song"
 }
 
 display_help() {
@@ -146,7 +146,7 @@ display_help() {
 # Store the selected artist in the variable "selected_artist"
 play() {
     display_logo
-    selected_artist=$(ls *.mp3 | awk -F ' - ' '{ artist = substr($1, 1, 512); gsub(/'\''/, "_", artist); print artist }' | sort -u | smenu -Q -c -q -n30 -W $'\n' -m "Select Artist")
+    selected_artist=$(ls *.mp3 | awk -F ' - ' '{ artist = substr($1, 1, 512); gsub(/'\''/, "_", artist); print artist }' | sort -u | smenu -c -q -n30 -W $'\n' -m "Select Artist")
     if [ "$selected_artist" = "" ]; then
         exit
     else
