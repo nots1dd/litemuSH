@@ -164,7 +164,7 @@ play() {
     clear
     display_logo
     # Display the thumbnail of the selected song
-    cover_image=$(extract_cover "/home/s1dd/Downloads/Songs/$selected_song")
+    cover_image=$(extract_cover "/home/${USER}/Downloads/Songs/$selected_song")
     copy_to_tmp "$cover_image"
     cleanup_temp_dir "$(dirname "$cover_image")"
     # Get duration of the selected song
