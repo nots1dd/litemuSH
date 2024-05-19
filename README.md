@@ -6,16 +6,16 @@
 
 -> ffplay and ffprobe (part of ffmpeg family)
 
--> smenu [AUR PACKAGE] or [github](https://github.com/p-gen/smenu)
+-> gum [AUR PACKAGE] or [github](https://github.com/charmbracelet/gum)
 
 -> bc (basic calculator) [AUR PACKAGE]
 
--> Common unix utils like grep, awk and jq
+-> Common unix utils like grep, awk, wc and jq
 
 ### Features (Currently)
 1. Very light weight (no bloat)
 2. Efficient extraction of a downloaded song's metadata (thumbnail, duration and lyrics only for now)
-3. A basic yet clean tui to interact with
+3. A basic yet clean tui to interact with thanks to gum
 4. Essential options like Pause, Play, Quit, volume control are implemented
 5. Other modes like `kill and return` and `silent return` and `lyrics view` are also available
 
@@ -30,7 +30,7 @@ In terms of watt-hours consumed by the entire process, it was on average **5-8.5
 Since ffmpeg is a vital tool in most operating systems, and smenu can be built in virtually any unix based OS, **building** all the dependencies is not a big issue.
 Feel free to let me know if there is an issue in any linux distro or not.
 
--> `yay -S smenu ffmpeg viu grep awk bc jq` or just use `install.sh` to do so (install script will **NOT** install smenu as it is an AUR package so users will need yay to install)
+-> Other packages you can just install them using `yay`
 
 NOTE :: You need to have `.mp3` files in your `~/Downloads/Songs` directory at this time. I will soon change this be user defined directory soon.
 
