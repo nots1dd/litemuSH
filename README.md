@@ -44,16 +44,16 @@ NOTE :: You need to have `.mp3` files in your `~/Downloads/Songs` directory at t
 **NOTE :: YOU SHOULD RUN THIS SCRIPT AT YOUR OWN DISCRETION, BE AWARE OF WHAT THE SCRIPT DOES AND ITS FUNCTIONALITIES BEFORE EXECUTING.**
 
 ### FUTURE
--> Update script to accept characters like `'` and others **[priority/high]**
+- [x] Update script to accept characters like `'` and others **[priority/high]**
 
--> To implement a queue feature first (have to initialize a songs directory as an array probably) **[priority/high]**
+- [ ] To implement a queue feature first (have to initialize a songs directory as an array probably) **[priority/high]**
 
--> Furnish the script in a tmux like environment (for a cleaner look and better tui experience) **[priority/med]**
+- [ ] Furnish the script in a tmux like environment (for a cleaner look and better tui experience) **[priority/med]**
 
--> Add support for other audio formats (right now only `.mp3` is tested) **[priority/low]**
+- [ ] Add support for other audio formats (right now only `.mp3` is tested) **[priority/low]**
 
--> With queue, previous and next play should also be implemented **[priority/high]**
+- [ ] With queue, previous and next play should also be implemented **[priority/high]**
 
--> Integration of spotdl [github](https://github.com/spotDL/spotify-downloader) **[priority/med]**
+- [ ] Integration of spotdl [github](https://github.com/spotDL/spotify-downloader) **[priority/med]**
 
--> Possibly make this an AUR package after all implementations
+- [ ] Possibly make this an AUR package after all implementations
