@@ -26,64 +26,96 @@ BOLD='\033[1m'
 source /home/s1dd/misc/litemus/lyrics/lyrics.sh
 source /home/s1dd/misc/litemus/utils/directory.sh
 source /home/s1dd/misc/litemus/functions/extract_cover.sh
-source /home/s1dd/misc/litemus/functions/toggle_playback.sh
+source /home/s1dd/misc/litemus/functions/playback/toggle_playback.sh
 source /home/s1dd/misc/litemus/functions/volume_ctrl.sh
 source /home/s1dd/misc/litemus/functions/display.sh
 source /home/s1dd/misc/litemus/functions/duration.sh
 source /home/s1dd/misc/litemus/functions/get_lyrics.sh
+source /home/s1dd/misc/litemus/functions/load_songs.sh
+source /home/s1dd/misc/litemus/functions/playback/play_next.sh
+source /home/s1dd/misc/litemus/functions/playback/play_prev.sh
 
 clear
 check_directory
-cd $directory
+cd "$directory"
 
-status_line="" 
+status_line=""
 
 display_logo() {
     echo -e "    " "${BLUE}${BOLD}LITEMUS - Light Music Player\n"
 }
 
-# Store the selected artist in the variable "selected_artist"
-play() {
-    clear
-    display_logo
-    selected_artist=$(ls *.mp3 | awk -F ' - ' '{ artist = substr($1, 1, 512); print artist}' | sort -u | gum choose --header "Choose artist" --limit 1 --height 30)
-    if [ "$selected_artist" = "" ]; then
-        exit
-    else
-    clear
-    display_logo
-    gum style --padding "1 5" --border double --border-foreground 212 "You selected artist:  $(gum style --foreground 200 "$selected_artist")"
+# Song Management
+declare -a song_list
+current_index=-1
 
-    # Store the selected song in the variable "selected_song"
-    selected_song=$(ls *.mp3 | grep "^$selected_artist" | gum choose --header "Choose song" --limit 1 --height 30)
-    if [ "$selected_song" = "" ]; then
-        exit
-    else
+# Play the song at the given index
+play_song_at_index() {
+    local index="$1"
+    if [ "$index" -lt 0 ] || [ "$index" -ge "${#song_list[@]}" ]; then
+        echo -e "${RED}Invalid song index.${NC}"
+        return
+    fi
 
-    # Clear the screen
+    current_index="$index"
+    local song="${song_list[$current_index]}"
+    selected_song="$song"
+
     clear
     display_logo
+
     # Display the thumbnail of the selected song
-    cover_image=$(extract_cover "/home/s1dd/Downloads/Songs/$selected_song")
+    cover_image=$(extract_cover "$song")
     copy_to_tmp "$cover_image"
     cleanup_temp_dir "$(dirname "$cover_image")"
+
     # Get duration of the selected song
-    duration=$(get_duration "$selected_song")
+    duration=$(get_duration "$song")
 
     # Display current song information
-    display_song_info "$selected_song" "$duration"
-    # display_help
+    display_song_info "$song" "$duration"
 
     # Play the selected song using ffplay in the background and store the PID
     killall ffplay >/dev/null 2>&1
-    ffplay -nodisp -autoexit "$selected_song" >/dev/null 2>&1 &
+    ffplay -nodisp -autoexit "$song" >/dev/null 2>&1 &
     ffplay_pid=$!
-    fi
+
+    # Extract and display lyrics
+    # get_lyrics "$selected_song"
+}
+
+# Main play function
+play() {
+    clear
+    display_logo
+
+    selected_artist=$(ls *.mp3 | awk -F ' - ' '{ artist = substr($1, 1, 512); print artist}' | sort -u | gum choose --header "Choose artist" --limit 1 --height 30)
+    if [ "$selected_artist" = "user aborted" ]; then
+        exit
+    else
+        clear
+        display_logo
+        gum style --padding "1 5" --border double --border-foreground 212 "You selected artist:  $(gum style --foreground 200 "$selected_artist")"
+
+        # Filter songs by selected artist
+        mapfile -t song_list < <(ls *.mp3 | grep "^$selected_artist" | sort)
+
+        # Store the selected song in the variable "selected_song"
+        selected_song=$(printf "%s\n" "${song_list[@]}" | gum choose --header "Choose song" --limit 1 --height 30)
+        if [ "$selected_song" = "user aborted" ]; then
+            exit
+        else
+            current_index=$(printf "%s\n" "${song_list[@]}" | grep -n "^$selected_song$" | cut -d: -f1)
+            current_index=$((current_index - 1))
+            play_song_at_index "$current_index"
+        fi
     fi
 }
+
 clear
 gum style --border normal --margin "1" --padding "1 2" --border-foreground 212 "Hello, there! Welcome to $(gum style --foreground 212 'LITEMUS')"
-gum spin --spinner dot --title "Launching LITEMUS..." -- sleep 1
+gum spin --spinner dot --title "Launching LITEMUS..." -- sleep 0.5
+load_songs
 play
 
 # Variable to track playback status (0 = playing, 1 = paused)
@@ -110,11 +142,13 @@ while true; do
             clear
             play
             ;;
-        s|S)
-            # dont kill just play in bg
-            echo "REDIRECTING..."
-            clear
-            play
+        n|N)
+            # Play next song
+            play_next
+            ;;
+        b|B)
+            # Play previous song
+            play_previous
             ;;
         q|Q)
             kill "$ffplay_pid" >/dev/null 2>&1
@@ -133,13 +167,11 @@ while true; do
         l|L)
             # Extract and display lyrics
             clear
-            get_lyrics "$selected_song"
+            get_lyrics "${song_list[$current_index]}"
             ;;
         u|U)
             clear
-            killall ffprobe >/dev/null 2>&1 # just checking something
-            display_song_info "$selected_song" "$duration"
-            # display_help
+            display_song_info "${song_list[$current_index]}" "$duration"
             ;;
         j|J)
             increase_volume

@@ -27,7 +27,7 @@ print_header() {
 # Function to install dependencies
 install_dependencies() {
     echo -e "Installing dependencies..."
-    sudo pacman -S --noconfirm bc ffmpeg viu grep awk gum jq
+    yay -S --noconfirm bc ffmpeg viu grep awk gum jq # will update install script to ask for which package man to go for
     if [ $? -eq 0 ]; then
         echo -e "${GREEN}${BOLD}Dependencies installed.${NC}"
     else

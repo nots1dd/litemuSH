@@ -1,55 +1,71 @@
 
-# Linkin Park - Numb.mp3
+# ACDC - Thunderstruck.mp3
 
-[Verse 1: Chester Bennington]
-I'm tired of being what you want me to be
-Feeling so faithless, lost under the surface
-I don't know what you're expecting of me
-Put under the pressure of walking in your shoes
+[Intro]
+Thunder, ah
+Thunder, ah
+Thunder, ah
+Thunder, ah
+Thunder, ah
+Thunder, ah
+Thunder, ah
+Thunder, ah
+Thunder, ah
+Thunder, ah
 
-[Pre-Chorus: Chester Bennington & Mike Shinoda]
-Caught in the undertow, just caught in the undertow
-Every step that I take is another mistake to you
-Caught in the undertow, just caught in the undertow
+[Verse 1]
+I was caught in the middle of a railroad track (Thunder)
+I looked 'round and I knew there was no turning back (Thunder)
+My mind raced and I thought, what could I do? (Thunder)
+And I knew there was no help, no help from you (Thunder)
+Sound of the drums beating in my heart
+The thunder of guns tore me apart
 
-[Chorus: Chester Bennington]
-I've become so numb, I can't feel you there
-Become so tired, so much more aware
-I'm becoming this, all I want to do
-Is be more like me and be less like you
+[Refrain]
+You've been - thunderstruck
 
-[Verse 2: Chester Bennington]
-Can't you see that you're smothering me?
-Holding too tightly, afraid to lose control
-'Cause everything that you thought I would be
-Has fallen apart, right in front of you
+[Verse 2]
+Went down the highway, broke the limit, we hit the town
+Went through to Texas, Yeah, Texas, and we had some fun
+We met some girls, some dancers who gave a good time
+Broke all the rules, played all the fools
+Yeah-yeah, they, they, they blew our minds
 
-[Pre-Chorus: Chester Bennington & Mike Shinoda]
-Caught in the undertow, just caught in the undertow
-Every step that I take is another mistake to you
-Caught in the undertow, just caught in the undertow
-And every second I waste is more than I can take
+[Pre-Chorus]
+I was shaking at the knees
+Could I come again please?
+Yeah, the ladies were too kind
 
-[Chorus: Chester Bennington]
-I've become so numb, I can't feel you there
-Become so tired, so much more aware
-I'm becoming this, all I want to do
-Is be more like me and be less like you
+[Chorus]
+You've been - thunderstruck, thunderstruck
+Yeah-yeah-yeah, thunderstruck
+Oh, thunderstruck
+Yeah
 
-[Bridge: Chester Bennington]
-And I know
-I may end up failing too
-But I know
-You were just like me with someone disappointed in you
+[Bridge 1]
+I was shaking at the knees
+Could I come again please?
+Yow
 
-[Chorus: Chester Bennington]
-I've become so numb, I can't feel you there
-Become so tired, so much more aware
-I'm becoming this, all I want to do
-Is be more like me and be less like you
+[Instrumental Break]
+[Guitar Solo]
 
-[Outro: Chester Bennington]
-I've become so numb, I can't feel you there
-I'm tired of being what you want me to be
-I've become so numb, I can't feel you there
-I'm tired of being what you want me to be
+[Chorus]
+Thunderstruck, thunderstruck
+Yeah-yeah-yeah, thunderstruck
+Thunderstruck, yeah, yeah, yeah
+Said
+
+[Bridge 2]
+Yeah, it's alright
+We're doing fine
+Yeah, it's alright
+We're doing fine, so fine
+
+[Chorus]
+Thunderstruck, yeah-yeah-yeah
+Thunderstruck, thunderstruck, thunderstruck
+Whoa, baby, baby (Thunderstruck)
+You've been thunderstruck, thunderstruck
+Thunderstruck, thunderstruck
+You've been thunderstruck
