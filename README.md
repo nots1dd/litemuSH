@@ -17,7 +17,8 @@
 2. Efficient extraction of a downloaded song's metadata (thumbnail, duration and lyrics only for now)
 3. A basic yet clean tui to interact with thanks to gum
 4. Essential options like Pause, Play, Quit, volume control and player control (prev/next song) all are implemented
-5. Other modes like `kill and return` and `silent return` and `lyrics view` are also available
+5. Ability to add items to queue and play them
+6. Other modes like `kill and return` and `silent return` and `lyrics view` are also available
 
 In terms of watt-hours consumed by the entire process, it was on average **5-8.5m/s** (seen on powertop)
 ![2024-05-14_17-27-25](https://github.com/nots1dd/litemus/assets/140317709/3293cb4a-cd03-4f4d-a425-c1b2497dcf0b)
@@ -41,12 +42,23 @@ NOTE :: You need to have `.mp3` files in your `~/Downloads/Songs` directory at t
 -> After ensuring all dependencies are present in your local machine, you can just clone this repository and run the script `install.sh` which will add an alias to your shell rc
 
 -> Then you should be able to run `lmus` anywhere and it will work
+
+In case it DOES NOT work, check the following :
+
+a. In `main.sh` the `$src` variable should be the directory where you cloned litemus
+
+b. If you do not have proper song metadata (might be a random mp3 file), lmus is NOT BUILT to play such media and will bug out in its UX
+
+c. Enter the **full directory** in the song directory prompt (tilde `~` does NOT work)
+
+d. Make sure you have run `install.sh` FIRST before running lmus (install script also might be a bit broken, you cannot fully rely on it)
+
 **NOTE :: YOU SHOULD RUN THIS SCRIPT AT YOUR OWN DISCRETION, BE AWARE OF WHAT THE SCRIPT DOES AND ITS FUNCTIONALITIES BEFORE EXECUTING.**
 
 ### FUTURE
 - [x] Update script to accept characters like `'` and others **[priority/high]**
 
-- [ ] To implement a queue feature first (have to initialize a songs directory as an array probably) **[priority/high]**
+- [x] To implement a queue feature first (have to initialize a songs directory as an array probably) **[priority/high]**
 
 - [ ] Furnish the script in a tmux like environment (for a cleaner look and better tui experience) **[priority/med]**
 
