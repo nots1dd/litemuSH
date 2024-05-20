@@ -2,7 +2,7 @@
 
 # LITEMUS (Light music player)
 
-# written by nots1dd
+# written by not
 # NOTE :: This script uses ffplay to play audio NOT PLAYERCTL
 # HENCE, it will NOT work well with your current configs that use playerctl and such
 
@@ -22,18 +22,10 @@ PINK='\033[1;35m'
 NC='\033[0m' # No Color
 BOLD='\033[1m'
 
+src="/home/$USER/misc/litemus" # change this to whatever directory litemus is in
+
 # sources
-source /home/s1dd/misc/litemus/lyrics/lyrics.sh
-source /home/s1dd/misc/litemus/utils/directory.sh
-source /home/s1dd/misc/litemus/functions/extract_cover.sh
-source /home/s1dd/misc/litemus/functions/playback/toggle_playback.sh
-source /home/s1dd/misc/litemus/functions/volume_ctrl.sh
-source /home/s1dd/misc/litemus/functions/display.sh
-source /home/s1dd/misc/litemus/functions/duration.sh
-source /home/s1dd/misc/litemus/functions/get_lyrics.sh
-source /home/s1dd/misc/litemus/functions/load_songs.sh
-source /home/s1dd/misc/litemus/functions/playback/play_next.sh
-source /home/s1dd/misc/litemus/functions/playback/play_prev.sh
+source $src/utils/modules.sh
 
 clear
 check_directory
@@ -47,18 +39,19 @@ display_logo() {
 
 # Song Management
 declare -a song_list
+declare -a queue
 current_index=-1
 
 # Play the song at the given index
 play_song_at_index() {
     local index="$1"
-    if [ "$index" -lt 0 ] || [ "$index" -ge "${#song_list[@]}" ]; then
+    if [ "$index" -lt 0 ] || [ "$index" -ge "${#queue[@]}" ]; then
         echo -e "${RED}Invalid song index.${NC}"
         return
     fi
 
     current_index="$index"
-    local song="${song_list[$current_index]}"
+    local song="${queue[$current_index]}"
     selected_song="$song"
 
     clear
@@ -73,15 +66,12 @@ play_song_at_index() {
     duration=$(get_duration "$song")
 
     # Display current song information
-    display_song_info "$song" "$duration"
+    display_song_info_minimal "$song" "$duration"
 
     # Play the selected song using ffplay in the background and store the PID
     killall ffplay >/dev/null 2>&1
     ffplay -nodisp -autoexit "$song" >/dev/null 2>&1 &
     ffplay_pid=$!
-
-    # Extract and display lyrics
-    # get_lyrics "$selected_song"
 }
 
 # Main play function
@@ -105,9 +95,9 @@ play() {
         if [ "$selected_song" = "user aborted" ]; then
             exit
         else
-            current_index=$(printf "%s\n" "${song_list[@]}" | grep -n "^$selected_song$" | cut -d: -f1)
-            current_index=$((current_index - 1))
-            play_song_at_index "$current_index"
+            queue+=("$selected_song")
+            current_index=${#queue[@]}
+            play_song_at_index "$((current_index - 1))"
         fi
     fi
 }
@@ -142,13 +132,18 @@ while true; do
             clear
             play
             ;;
+        s|S)
+            # go back silently
+            clear
+            play
+            ;;
         n|N)
-            # Play next song
-            play_next
+            # Play next song in queue
+            play_next_in_queue
             ;;
         b|B)
-            # Play previous song
-            play_previous
+            # play previous song in queue
+            play_prev_in_queue
             ;;
         q|Q)
             kill "$ffplay_pid" >/dev/null 2>&1
@@ -167,17 +162,31 @@ while true; do
         l|L)
             # Extract and display lyrics
             clear
-            get_lyrics "${song_list[$current_index]}"
+            get_lyrics "${queue[$current_index]}"
             ;;
         u|U)
             clear
-            display_song_info "${song_list[$current_index]}" "$duration"
+            display_song_info_minimal "${queue[$current_index]}" "$duration"
+            ;;
+        h|H)
+            clear
+            display_help
             ;;
         j|J)
             increase_volume
             ;;
         k|K)
             decrease_volume
+            ;;
+        a|A)
+            # Add song to queue
+            clear
+            queue_func
+            ;;
+        d|D)
+            # display the queue
+            clear
+            display_queue
             ;;
         *)
             continue

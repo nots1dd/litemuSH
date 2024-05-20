@@ -1,7 +1,7 @@
 get_lyrics() {
     local song="$1"
     local lyrics=$(ffprobe -v quiet -print_format json -show_entries format_tags=lyrics-XXX -of default=nw=1:nk=1 "$song" 2>/dev/null)
-    local lyrics_file="$HOME/misc/litemus/lyrics.md"  # Ensure the directory exists
+    local lyrics_file="$src/lyrics.md"  # Ensure the directory exists
 
     if [ "$lyrics" = "" ]; then
         clear
