@@ -16,7 +16,7 @@
 1. Very light weight (no bloat)
 2. Efficient extraction of a downloaded song's metadata (thumbnail, duration and lyrics only for now)
 3. A basic yet clean tui to interact with thanks to gum
-4. Essential options like Pause, Play, Quit, volume control are implemented
+4. Essential options like Pause, Play, Quit, volume control and player control (prev/next song) all are implemented
 5. Other modes like `kill and return` and `silent return` and `lyrics view` are also available
 
 In terms of watt-hours consumed by the entire process, it was on average **5-8.5m/s** (seen on powertop)
@@ -52,7 +52,7 @@ NOTE :: You need to have `.mp3` files in your `~/Downloads/Songs` directory at t
 
 - [ ] Add support for other audio formats (right now only `.mp3` is tested) **[priority/low]**
 
-- [ ] With queue, previous and next play should also be implemented **[priority/high]**
+- [x] Previous and Next play should also be implemented **[priority/high]**
 
 - [ ] Integration of spotdl [github](https://github.com/spotDL/spotify-downloader) **[priority/med]**
 
