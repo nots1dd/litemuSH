@@ -2,7 +2,7 @@
 
 # LITEMUS (Light music player)
 
-# written by not
+# written by nots1dd
 # NOTE :: This script uses ffplay to play audio NOT PLAYERCTL
 # HENCE, it will NOT work well with your current configs that use playerctl and such
 
@@ -32,6 +32,7 @@ check_directory
 cd "$directory"
 
 status_line=""
+timer_line=""
 
 display_logo() {
     echo -e "    " "${BLUE}${BOLD}LITEMUS - Light Music Player\n"
@@ -42,38 +43,6 @@ declare -a song_list
 declare -a queue
 current_index=-1
 
-# Play the song at the given index
-play_song_at_index() {
-    local index="$1"
-    if [ "$index" -lt 0 ] || [ "$index" -ge "${#queue[@]}" ]; then
-        echo -e "${RED}Invalid song index.${NC}"
-        return
-    fi
-
-    current_index="$index"
-    local song="${queue[$current_index]}"
-    selected_song="$song"
-
-    clear
-    display_logo
-
-    # Display the thumbnail of the selected song
-    cover_image=$(extract_cover "$song")
-    copy_to_tmp "$cover_image"
-    cleanup_temp_dir "$(dirname "$cover_image")"
-
-    # Get duration of the selected song
-    duration=$(get_duration "$song")
-
-    # Display current song information
-    display_song_info_minimal "$song" "$duration"
-
-    # Play the selected song using ffplay in the background and store the PID
-    killall ffplay >/dev/null 2>&1
-    ffplay -nodisp -autoexit "$song" >/dev/null 2>&1 &
-    ffplay_pid=$!
-}
-
 # Main play function
 play() {
     clear
@@ -81,7 +50,7 @@ play() {
 
     selected_artist=$(ls *.mp3 | awk -F ' - ' '{ artist = substr($1, 1, 512); print artist}' | sort -u | gum choose --header "Choose artist" --limit 1 --height 30)
     if [ "$selected_artist" = "user aborted" ]; then
-        exit
+        gum confirm --default "Exit Litemus?" && exit || play
     else
         clear
         display_logo
@@ -93,11 +62,11 @@ play() {
         # Store the selected song in the variable "selected_song"
         selected_song=$(printf "%s\n" "${song_list[@]}" | gum choose --header "Choose song" --limit 1 --height 30)
         if [ "$selected_song" = "user aborted" ]; then
-            exit
+            gum confirm --default "Exit Litemus?" && exit || play
         else
             queue+=("$selected_song")
             current_index=${#queue[@]}
-            play_song_at_index "$((current_index - 1))"
+            ffplay_song_at_index "$((current_index - 1))"
         fi
     fi
 }
@@ -119,7 +88,7 @@ while true; do
     read -n 1 -s key
     case $key in
         p|P)
-            toggle_playback
+            toggle_ffplayback
             if [[ $paused -eq 0 ]]; then
                 paused=1
             else
@@ -137,13 +106,21 @@ while true; do
             clear
             play
             ;;
+        # o|O)
+        #     # just play the next index
+        #     play_next
+        #     ;;
+        # i|I)
+        #     # play the previous index
+        #     play_previous
+        #     ;;
         n|N)
             # Play next song in queue
-            play_next_in_queue
+            ffplay_next_in_queue
             ;;
         b|B)
             # play previous song in queue
-            play_prev_in_queue
+            ffplay_prev_in_queue
             ;;
         q|Q)
             kill "$ffplay_pid" >/dev/null 2>&1
@@ -154,14 +131,15 @@ while true; do
             # Check current position
             if [ -n "$ffplay_pid" ]; then
                 current_position=$(ps -o etime= -p "$ffplay_pid")
-                status_line="Current position: ${BLUE}$current_position${NC}"
+                status_line="Playback:${BLUE}$current_position${NC}/$duration"
             else
                 status_line="${RED}No track is currently playing.${NC}"
             fi
             ;;
         l|L)
             # Extract and display lyrics
-            clear
+            status_line=""
+            sleep 0.5
             get_lyrics "${queue[$current_index]}"
             ;;
         u|U)
@@ -188,6 +166,13 @@ while true; do
             clear
             display_queue
             ;;
+        # f|F)
+        #     forward_song_5_seconds
+        #     ;;
+        r|R)
+            ffrestart_song
+            ;;
+            
         *)
             continue
             ;;

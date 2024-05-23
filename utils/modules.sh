@@ -1,5 +1,5 @@
 # all sources go here
-source $src/lyrics/lyrics.sh
+source $src/lyrics/zsh_lyrics.sh
 source $src/utils/directory.sh
 source $src/functions/extract_cover.sh
 source $src/functions/playback/toggle_playback.sh
@@ -13,3 +13,6 @@ source $src/functions/playback/play_prev.sh
 source $src/functions/queue.sh
 source $src/functions/queue/qplay_next.sh
 source $src/functions/queue/qplay_prev.sh
+source $src/functions/playback/monitor_pb.sh
+source $src/functions/playback/ffplay_index.sh # for ffplay
+source $src/functions/playback/time.sh

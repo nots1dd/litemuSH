@@ -31,7 +31,7 @@ display_song_info_minimal() {
 
 display_help() {
     display_logo
-    gum style --padding "1 5" --border double --border-foreground 240 "Show help (h)" "Pause/Play (p)" "Add a song to queue (a)" "Display Queue (d)" "Next Song (n)" "Previous Song (b)" "Volume up (j)" "Volume down (k)" "Check current position (c)" "Display current queue (d)" "Lyrics (l)" "Go back (u)" "Kill and go back to menu (t)" "Silently go back to menu (s)" "Quit (q)" "" "NOTE :: Capital letters also work"
+    gum style --padding "1 5" --border double --border-foreground 240 "Show help (h)" "Pause/Play (p)" "Replay current song (r)" "Add a song to queue (a)" "Display Queue (d)" "Next Song (n)" "Previous Song (b)" "Volume up (j)" "Volume down (k)" "Check current position (c)" "Display current queue (d)" "Lyrics (l)" "Go back (u)" "Kill and go back to menu (t)" "Silently go back to menu (s)" "Quit (q)" "" "NOTE :: Capital letters also work"
     gum style --padding "1 5" --border double --border-foreground 245 "To GO BACK press u or U"
     
 }

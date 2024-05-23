@@ -1,5 +1,5 @@
 # Function to toggle playback status (pause/play)
-toggle_playback() {
+toggle_ffplayback() {
     if [[ $paused -eq 0 ]]; then
         # If currently playing, pause playback
         if kill -STOP "$ffplay_pid" >/dev/null 2>&1; then

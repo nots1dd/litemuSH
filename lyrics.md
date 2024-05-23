@@ -1,74 +1,53 @@
 
-# ACDC - Back In Black.mp3
+# Radiohead - Creep.mp3
 
 [Verse 1]
-Back in black, I hit the sack
-I've been too long, I'm glad to be back
-Yes, I'm let loose from the noose
-That's kept me hangin' about
-I'm just a-lookin' at the sky 'cause it's gettin' me high
-Forget the hearse, 'cause I'll never die
-I got nine lives, cat's eyes
-Abusin' every one of them and runnin' wild
+When you were here before
+Couldn't look you in the eye
+You're just like an angel
+Your skin makes me cry
+You float like a feather
+In a beautiful world
+
+[Pre-Chorus]
+I wish I was special
+You're so fuckin' special
 
 [Chorus]
-'Cause I'm back
-Yes, I'm back
-Well, I'm back
-Yes, I'm back
-Well, I'm back, back
-Well, I'm back in black
-Yes, I'm back in black
+But I'm a creep, I'm a weirdo
+What the hell am I doing here?
+I don't belong here
 
 [Verse 2]
-Oh, back in the back of a Cadillac
-Number one with a bullet, I'm a power pack
-Yes, I'm in a bang, ooh, with a gang
-They've got to catch me if they want me to hang
-'Cause I'm back on the track and I'm beatin' the flack
-Nobody's gonna get me on another rap
-So, look at me now, I'm just a-makin' my play
-Don't try to push your luck, just get outta my way
+I don't care if it hurts
+I wanna have control
+I want a perfect body
+I want a perfect soul
+I want you to notice
+When I'm not around
+
+[Pre-Chorus]
+You're so fuckin' special
+I wish I was special
 
 [Chorus]
-'Cause I'm back
-Yes, I'm back
-Well, I'm back
-Yes, I'm back
-Well, I'm back, back
-Well, I'm back in black
-Yes, I'm back in black
-
-[Guitar Solo]
-
-[Chorus]
-Well, I'm back
-Yes, I'm back
-Well, I'm back
-Yes, I'm back
-Well, I'm back, back
-Well, I'm back in black
-Yes, I'm back in black, yow
+But I'm a creep, I'm a weirdo
+What the hell am I doing here?
+I don't belong here
+Oh-oh, oh-oh
 
 [Bridge]
-Ah, yeah
-Oh, yeah
-Yes, I am
-Oh, yeah
-Yeah
-Ah, hey yeah
-Ooh, yeah
-
-[Chorus]
-Well, I'm back (I'm back)
-Back (Well, I'm back)
-Back (I'm back)
-Back (I'm back)
-Back (I'm back)
-Back, back in black
-Yes, I'm back in black
+She's running out the door
+She's running out
+She run, run, run, run
+Run
 
 [Outro]
-Outta the sack
-
-[Guitar Solo]
+Whatever makes you happy
+Whatever you want
+You're so fuckin' special
+I wish I was special
+But I'm a creep, I'm a weirdo
+What the hell am I doing here?
+I don't belong here
+I don't belong here

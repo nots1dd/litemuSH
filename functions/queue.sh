@@ -14,9 +14,9 @@ queue_func() {
         mapfile -t song_list < <(ls *.mp3 | grep "^$selected_artist" | sort)
 
         # Store the selected song in the variable "selected_song"
-        selected_song=$(printf "%s\n" "${song_list[@]}" | gum choose --header "Choose song" --limit 1 --height 30)
+        selected_song=$(printf "%s\n" "${song_list[@]}" | gum choose --header "Choose song" --limit=1 --height 30)
         if [ "$selected_song" = "user aborted" ]; then
-            exit
+            gum confirm --default "Exit Litemus?" && exit || queue_func
         else
             queue+=("$selected_song")
             clear
@@ -32,16 +32,24 @@ queue_func() {
 display_queue() {
     clear
     display_logo
+
     if [ "${#queue[@]}" -eq 0 ]; then
         echo -e "${YELLOW}The queue is currently empty.${NC}"
     else
         echo -e "${GREEN}Current Queue:${NC}"
+        
+        queue_display=""
         for i in "${!queue[@]}"; do
             if [ "$i" -eq "$current_index" ]; then
-                echo -e "${BLUE}>> ${queue[$i]}${NC}"
+                queue_display+=$(gum style --foreground 066 ">> ${queue[$i]}")
             else
-                echo "   ${queue[$i]}"
+                queue_display+="${queue[$i]}"
             fi
+            queue_display+="\n"
         done
+
+        # Use gum style to display the entire queue
+        gum style --padding "1 5" --border double --border-foreground 212 "$(echo -e "$queue_display")"
+        gum style --padding "1 5" --border double --border-foreground 245 "To GO BACK press u or U"
     fi
 }

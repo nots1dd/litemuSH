@@ -4,10 +4,8 @@ get_lyrics() {
     local lyrics_file="$src/lyrics.md"  # Ensure the directory exists
 
     if [ "$lyrics" = "" ]; then
-        clear
-        gum style --padding "1 5" --border double --border-foreground 240 "Lyrics not available for this song." "To GO BACK press u/U"
+        status_line="${RED}Lyrics are not available for this song."
     else
-        clear
 
         # Clear the lyrics file before writing new lyrics
         echo "" > "$lyrics_file"
