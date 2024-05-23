@@ -65,8 +65,8 @@ play() {
             gum confirm --default "Exit Litemus?" && exit || play
         else
             queue+=("$selected_song")
-            current_index=${#queue[@]}
-            ffplay_song_at_index "$((current_index - 1))"
+            current_index=$(( ${#queue[@]} - 1 ))
+            ffplay_song_at_index "$current_index"
         fi
     fi
 }
@@ -82,100 +82,3 @@ paused=0
 
 # Trap the SIGINT signal (Ctrl+C) to exit the playback
 trap exit SIGINT
-
-# Loop to continuously handle user input
-while true; do
-    read -n 1 -s key
-    case $key in
-        p|P)
-            toggle_ffplayback
-            if [[ $paused -eq 0 ]]; then
-                paused=1
-            else
-                paused=0
-            fi
-            ;;
-        t|T)
-            # Return to song selection menu
-            kill "$ffplay_pid" >/dev/null 2>&1
-            clear
-            play
-            ;;
-        s|S)
-            # go back silently
-            clear
-            play
-            ;;
-        # o|O)
-        #     # just play the next index
-        #     play_next
-        #     ;;
-        # i|I)
-        #     # play the previous index
-        #     play_previous
-        #     ;;
-        n|N)
-            # Play next song in queue
-            ffplay_next_in_queue
-            ;;
-        b|B)
-            # play previous song in queue
-            ffplay_prev_in_queue
-            ;;
-        q|Q)
-            kill "$ffplay_pid" >/dev/null 2>&1
-            echo -e "\n${RED}Exiting...${NC}"
-            exit
-            ;;
-        c|C)
-            # Check current position
-            if [ -n "$ffplay_pid" ]; then
-                current_position=$(ps -o etime= -p "$ffplay_pid")
-                status_line="Playback:${BLUE}$current_position${NC}/$duration"
-            else
-                status_line="${RED}No track is currently playing.${NC}"
-            fi
-            ;;
-        l|L)
-            # Extract and display lyrics
-            status_line=""
-            sleep 0.5
-            get_lyrics "${queue[$current_index]}"
-            ;;
-        u|U)
-            clear
-            display_song_info_minimal "${queue[$current_index]}" "$duration"
-            ;;
-        h|H)
-            clear
-            display_help
-            ;;
-        j|J)
-            increase_volume
-            ;;
-        k|K)
-            decrease_volume
-            ;;
-        a|A)
-            # Add song to queue
-            clear
-            queue_func
-            ;;
-        d|D)
-            # display the queue
-            clear
-            display_queue
-            ;;
-        # f|F)
-        #     forward_song_5_seconds
-        #     ;;
-        r|R)
-            ffrestart_song
-            ;;
-            
-        *)
-            continue
-            ;;
-    esac
-    echo -ne "\r\033[K$status_line"
-done

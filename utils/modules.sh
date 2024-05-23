@@ -10,9 +10,10 @@ source $src/functions/get_lyrics.sh
 source $src/functions/load_songs.sh
 source $src/functions/playback/play_next.sh
 source $src/functions/playback/play_prev.sh
-source $src/functions/queue.sh
+source $src/functions/queue/queue.sh
 source $src/functions/queue/qplay_next.sh
 source $src/functions/queue/qplay_prev.sh
 source $src/functions/playback/monitor_pb.sh
 source $src/functions/playback/ffplay_index.sh # for ffplay
 source $src/functions/playback/time.sh
+source $src/functions/keybinds.sh
