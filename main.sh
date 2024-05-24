@@ -59,17 +59,60 @@ play() {
         # Filter songs by selected artist
         mapfile -t song_list < <(ls *.mp3 | grep "^$selected_artist" | sort)
 
-        # Store the selected song in the variable "selected_song"
-        selected_song=$(printf "%s\n" "${song_list[@]}" | gum choose --header "Choose song" --limit 1 --height 30)
-        if [ "$selected_song" = "user aborted" ]; then
+        # Sort songs by album using ffprobe
+        declare -A album_sorted_songs
+        for song in "${song_list[@]}"; do
+            album=$(ffprobe -v quiet -print_format json -show_entries format_tags=album -of default=nw=1:nk=1 "$song")
+            album=${album:-"Unknown Album"}
+            album_sorted_songs["$album"]+="$song"$'\n' # TODO: Find a good way to giving new line to every song, right now there is a blank line between every album's songs
+        done
+
+        # Convert associative array to a list of songs sorted by album
+        sorted_song_list=()
+        for album in "${!album_sorted_songs[@]}"; do
+            mapfile -t album_songs <<< "${album_sorted_songs[$album]}"
+            for song in "${album_songs[@]}"; do
+                if [ "$song" != "\n" ]; then
+                    sorted_song_list+=("$song")
+                fi
+            done
+        done
+
+        # Present the list of song names to the user for selection
+        song_display_list=()
+        for song in "${sorted_song_list[@]}"; do
+            song_display_list+=("$(echo "$song" | awk -F ' - ' '{ print $2 }' | sed 's/\.mp3//')")
+        done
+
+        # Store the selected song display name in the variable "selected_song_display"
+        selected_song_display=$(printf "%s\n" "${song_display_list[@]}" | gum choose --header "Choose song" --limit 1 --height 30)
+        
+        if [ "$selected_song_display" = "user aborted" ] || [ -z "$selected_song_display" ]; then
             gum confirm --default "Exit Litemus?" && exit || play
         else
-            queue+=("$selected_song")
-            current_index=$(( ${#queue[@]} - 1 ))
+            # Find the full name of the selected song
+            selected_song=""
+            for song in "${sorted_song_list[@]}"; do
+                song_name=$(echo "$song" | awk -F ' - ' '{ print $2 }' | sed 's/\.mp3//')
+                if [ "$song_name" = "$selected_song_display" ]; then
+                    selected_song="$song"
+                    break
+                fi
+            done
+
+            queue=("$selected_song" "${queue[@]}") # Add to the beginning of the queue
+            current_index=0
+
+            # Add the selected song to the played_songs array
+            played_songs+=("$selected_song")
+
             ffplay_song_at_index "$current_index"
         fi
     fi
 }
+
+
+
 
 clear
 gum style --border normal --margin "1" --padding "1 2" --border-foreground 212 "Hello, there! Welcome to $(gum style --foreground 212 'LITEMUS')"

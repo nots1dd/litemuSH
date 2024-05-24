@@ -26,7 +26,7 @@ display_song_info_minimal() {
     # Display the song information
     display_logo
     viu --width 24 --height 10 ~/newtmp.png
-    gum style --padding "1 5" --border double --border-foreground 255 "$(gum style --foreground 090 'NOW PLAYING')" "" "$(gum style --foreground 180 "$song_name") by $(gum style --foreground 200 "$artist")" "Album: $(gum style --foreground 105 "$album")" "Duration: $(gum style --foreground 066 "$duration")" "Next: $(gum style --foreground 065 "$next_song_name") by $(gum style --foreground 100 "$next_artist")" "Queue: $(gum style --foreground 130 "$queue_count")"
+    gum style --padding "1 5" --border double --border-foreground 255 "$(gum style --foreground 101 'NOW PLAYING')" "" "$(gum style --foreground 180 "$song_name") by $(gum style --foreground 200 "$artist")" "Album: $(gum style --foreground 105 "$album")" "Duration: $(gum style --foreground 066 "$duration")" "Next: $(gum style --foreground 065 "$next_song_name") by $(gum style --foreground 100 "$next_artist")" "Queue: $(gum style --foreground 130 "$queue_count")"
 }
 
 display_help() {

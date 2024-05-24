@@ -13,11 +13,28 @@ queue_func() {
         # Filter songs by selected artist
         mapfile -t song_list < <(ls *.mp3 | grep "^$selected_artist" | sort)
 
-        # Store the selected song in the variable "selected_song"
-        selected_song=$(printf "%s\n" "${song_list[@]}" | gum choose --header "Choose song" --limit=1 --height 30)
-        if [ "$selected_song" = "user aborted" ]; then
-            gum confirm --default "Exit Litemus?" && exit || queue_func
+        # Present the list of song names to the user for selection
+        song_display_list=()
+        for song in "${song_list[@]}"; do
+            song_display_list+=("$(echo "$song" | awk -F ' - ' '{ print $2 }' | sed 's/\.mp3//')")
+        done
+
+        # Store the selected song display name in the variable "selected_song_display"
+        selected_song_display=$(printf "%s\n" "${song_display_list[@]}" | gum choose --header "Choose song" --limit 1 --height 30)
+        
+        if [ "$selected_song_display" = "user aborted" ]; then
+            gum confirm --default "Exit Litemus?" && exit || play
         else
+            # Find the full name of the selected song
+            selected_song=""
+            for song in "${song_list[@]}"; do
+                song_name=$(echo "$song" | awk -F ' - ' '{ print $2 }' | sed 's/\.mp3//')
+                if [ "$song_name" = "$selected_song_display" ]; then
+                    selected_song="$song"
+                    break
+                fi
+            done
+
             queue+=("$selected_song")
             clear
             display_logo

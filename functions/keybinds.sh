@@ -1,7 +1,11 @@
 keybinds() {
+    time=""
     # Loop to continuously handle user input
     while kill -0 $ffplay_pid 2>/dev/null; do
-        read -n 1 -s key
+        if [[ $paused -eq 0 ]]; then
+            time=$(ps -o etime= --no-headers -p $ffplay_pid)
+        fi
+        read -t 1 -n 1 -s key
         case $key in
             p|P)
                 toggle_ffplayback
@@ -38,12 +42,7 @@ keybinds() {
                 ;;
             c|C)
                 # Check current position
-                if [ -n "$ffplay_pid" ]; then
-                    current_position=$(ps -o etime= -p "$ffplay_pid")
-                    status_line="Playback:${BLUE}$current_position${NC}/$duration"
-                else
-                    status_line="${RED}No track is currently playing.${NC}"
-                fi
+                status_line="\rPlayback:$time"
                 ;;
             l|L)
                 # Extract and display lyrics

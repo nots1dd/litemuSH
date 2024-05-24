@@ -32,7 +32,7 @@ ffplay_song_at_index() {
     ffplay_pid=$!
     keybinds
     wait $ffplay_pid
-    
+    # for smooth transistion to the next song
     current_index=$((current_index + 1))
     if [ "$current_index" -lt "${#queue[@]}" ]; then
         ffplay_song_at_index "$current_index"
