@@ -80,6 +80,13 @@ keybinds() {
             r|R)
                 ffrestart_song
                 ;;
+            x|X)
+                kill "$ffplay_pid" >/dev/null 2>&1
+                clear
+                queue=() # remove queue
+                directory_func # change directory
+                main
+                ;;
                 
             *)
                 continue

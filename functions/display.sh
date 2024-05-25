@@ -26,12 +26,12 @@ display_song_info_minimal() {
     # Display the song information
     display_logo
     viu --width 24 --height 10 ~/newtmp.png
-    gum style --padding "1 5" --border double --border-foreground 255 "$(gum style --foreground 101 'NOW PLAYING')" "" "$(gum style --foreground 180 "$song_name") by $(gum style --foreground 200 "$artist")" "Album: $(gum style --foreground 105 "$album")" "Duration: $(gum style --foreground 066 "$duration")" "Next: $(gum style --foreground 065 "$next_song_name") by $(gum style --foreground 100 "$next_artist")" "Queue: $(gum style --foreground 130 "$queue_count")"
+    gum style --padding "1 5" --border double --border-foreground 070 "$(gum style --foreground 101 'NOW PLAYING')" "" "$(gum style --foreground 066 "$song_name") by $(gum style --foreground 068 "$artist")" "" "Album: $(gum style --foreground 105 "$album")" "Duration: $(gum style --foreground 080 "$duration")" "Next: $(gum style --foreground 065 "$next_song_name") by $(gum style --foreground 100 "$next_artist")" "Queue: $(gum style --foreground 130 "$queue_count")"
 }
 
 display_help() {
     display_logo
-    gum style --padding "1 5" --border double --border-foreground 240 "Show help (h)" "Pause/Play (p)" "Replay current song (r)" "Add a song to queue (a)" "Display Queue (d)" "Next Song (n)" "Previous Song (b)" "Volume up (j)" "Volume down (k)" "Check current position (c)" "Display current queue (d)" "Lyrics (l)" "Go back (u)" "Kill and go back to menu (t)" "Silently go back to menu (s)" "Quit (q)" "" "NOTE :: Capital letters also work"
+    gum style --padding "1 5" --border double --border-foreground 240 "1. Show help (h)" "2. Pause/Play (p)" "3. Replay current song (r)" "4. Add a song to queue (a)" "5. Display Queue (d)" "6. Next Song (n)" "7. Previous Song (b)" "8. Volume up (j)" "9. Volume down (k)" "10. Check current position (c)" "11. Lyrics (l)" "12. Go back (u)" "13. Kill and go back to menu (t)" "14. Silently go back to menu (s)" "15. Quit (q)" "16. Change song directory (x)" "" "NOTE :: Capital letters also work"
     gum style --padding "1 5" --border double --border-foreground 245 "To GO BACK press u or U"
     
 }

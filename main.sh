@@ -23,13 +23,13 @@ NC='\033[0m' # No Color
 BOLD='\033[1m'
 
 src="/home/$USER/misc/litemus" # change this to whatever directory litemus is in
+cache="/home/$USER/misc/litemus/.cache" # change this to whatever directory litemus is in
 
 # sources
 source $src/utils/modules.sh
 
 clear
 check_directory
-cd "$directory"
 
 status_line=""
 timer_line=""
@@ -113,12 +113,12 @@ play() {
 
 
 
-
-clear
-gum style --border normal --margin "1" --padding "1 2" --border-foreground 212 "Hello, there! Welcome to $(gum style --foreground 212 'LITEMUS')"
-gum spin --spinner dot --title "Launching LITEMUS..." -- sleep 0.5
-load_songs
-play
+main() {
+    clear
+    load_songs
+    play
+}
+main
 
 # Variable to track playback status (0 = playing, 1 = paused)
 paused=0

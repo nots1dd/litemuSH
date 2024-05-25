@@ -13,9 +13,28 @@ queue_func() {
         # Filter songs by selected artist
         mapfile -t song_list < <(ls *.mp3 | grep "^$selected_artist" | sort)
 
+        # Sort songs by album using ffprobe
+        declare -A album_sorted_songs
+        for song in "${song_list[@]}"; do
+            album=$(ffprobe -v quiet -print_format json -show_entries format_tags=album -of default=nw=1:nk=1 "$song")
+            album=${album:-"Unknown Album"}
+            album_sorted_songs["$album"]+="$song"$'\n' # TODO: Find a good way to giving new line to every song, right now there is a blank line between every album's songs
+        done
+
+        # Convert associative array to a list of songs sorted by album
+        sorted_song_list=()
+        for album in "${!album_sorted_songs[@]}"; do
+            mapfile -t album_songs <<< "${album_sorted_songs[$album]}"
+            for song in "${album_songs[@]}"; do
+                if [ "$song" != "\n" ]; then
+                    sorted_song_list+=("$song")
+                fi
+            done
+        done
+
         # Present the list of song names to the user for selection
         song_display_list=()
-        for song in "${song_list[@]}"; do
+        for song in "${sorted_song_list[@]}"; do
             song_display_list+=("$(echo "$song" | awk -F ' - ' '{ print $2 }' | sed 's/\.mp3//')")
         done
 
