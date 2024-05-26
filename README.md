@@ -22,6 +22,7 @@
 5. Ability to add items to queue and play them
 6. Other modes like `kill and return` and `silent return` and `lyrics view` are also available
 7. Easy **THEME** configuration read `.config/theme.md`
+8. Cache of songs and other data for faster parsing and efficiency (setup `.cache`)
 
 In terms of watt-hours consumed by the entire process, it was on average **5-8.5m/s** (seen on powertop)
 ![2024-05-14_17-27-25](https://github.com/nots1dd/litemus/assets/140317709/3293cb4a-cd03-4f4d-a425-c1b2497dcf0b)
