@@ -10,7 +10,9 @@
 
 -> bc (basic calculator) [AUR PACKAGE]
 
--> Common unix utils like grep, awk, wc and jq
+-> jq (to parse json) [AUR PACKAGE]
+
+-> Common unix utils like grep, awk, wc
 
 ### Features (Currently)
 1. Very light weight (no bloat)
@@ -19,6 +21,7 @@
 4. Essential options like Pause, Play, Quit, volume control and player control (prev/next song) all are implemented
 5. Ability to add items to queue and play them
 6. Other modes like `kill and return` and `silent return` and `lyrics view` are also available
+7. Easy **THEME** configuration read `.config/theme.md`
 
 In terms of watt-hours consumed by the entire process, it was on average **5-8.5m/s** (seen on powertop)
 ![2024-05-14_17-27-25](https://github.com/nots1dd/litemus/assets/140317709/3293cb4a-cd03-4f4d-a425-c1b2497dcf0b)
@@ -45,7 +48,7 @@ NOTE :: You need to have `.mp3` files in your `~/Downloads/Songs` directory at t
 
 In case it DOES NOT work, check the following :
 
-a. In `main.sh` the `$src` variable should be the directory where you cloned litemus
+a. In `main.sh` the `$src` and other variables should be the directory where you cloned litemus
 
 b. If you do not have proper song metadata (might be a random mp3 file), lmus is NOT BUILT to play such media and will bug out in its UX
 
