@@ -19,3 +19,4 @@ source $src/functions/playback/time.sh
 source $src/functions/keybinds.sh
 source $src/functions/cache/load_cache.sh
 source $src/functions/cache/save_cache.sh
+source $src/functions/theme/theme.sh

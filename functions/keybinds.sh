@@ -86,6 +86,11 @@ keybinds() {
                 directory_func # change directory
                 main
                 ;;
+            y|Y)
+                reload_theme
+                display_song_info_minimal "${queue[$current_index]}" "$duration"
+                status_line="Theme reloaded."
+                ;;
                 
             *)
                 continue

@@ -20,6 +20,7 @@ ffplay_song_at_index() {
     duration=$(get_duration "$song")
 
     # Display current song information
+    load_theme "$theme_dir"
     display_song_info_minimal "$song" "$duration"
     time=$(ffprobe -v quiet -print_format json -show_format -show_streams "$song" | jq -r '.format.duration')
 

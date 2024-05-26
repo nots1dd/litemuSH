@@ -21,20 +21,17 @@ calculate_time_left_in_queue() {
 display_song_info_minimal() {
     local song="$1"
     local duration="$2"
+    local status="$3"
 
-    # Extract song name and artist from the file name
-    song_name=$(echo "$song" | awk -F ' - ' '{ print $2 }' | sed 's/\.mp3//')
+    song_name=$(echo "$song" | awk -F ' - ' '{ print $2 }' | sed 's/\.mp3//' | tr -d '\n')
     artist=$(ffprobe -v quiet -print_format json -show_entries format_tags=artist -of default=nw=1:nk=1 "$song")
     album=$(ffprobe -v quiet -print_format json -show_entries format_tags=album -of default=nw=1:nk=1 "$song")
 
-    status="$3"
-
     clear
 
-    # Get the next song in the queue, if any
     if [ "$current_index" -lt "$((${#queue[@]} - 1))" ]; then
         next_song="${queue[$((current_index + 1))]}"
-        next_song_name=$(echo "$next_song" | awk -F ' - ' '{ print $2 }' | sed 's/\.mp3//')
+        next_song_name=$(echo "$next_song" | awk -F ' - ' '{ print $2 }' | sed 's/\.mp3//' | tr -d '\n')
         next_artist=$(ffprobe -v quiet -print_format json -show_entries format_tags=artist -of default=nw=1:nk=1 "$next_song")
     else
         next_song_name="N/A"
@@ -44,14 +41,13 @@ display_song_info_minimal() {
     queue_count=$(( ${#queue[@]} - current_index - 1 ))
     queue_time=$(calculate_time_left_in_queue)
 
-    # Display the song information
     display_logo
     viu --width 24 --height 10 ~/newtmp.png
-    gum style --padding "1 5" --border thick --border-foreground 070 "$(gum style --foreground 101 'NOW PLAYING')" "" "$(gum style --foreground 066 "$song_name") by $(gum style --foreground 068 "$artist")" "" "Album: $(gum style --foreground 105 "$album")" "Duration: $(gum style --foreground 080 "$duration")" "Next: $(gum style --foreground 065 "$next_song_name") by $(gum style --foreground 100 "$next_artist")" "Queue: $(gum style --foreground 130 "$queue_count")" "Play time: $(gum style --foreground 135 "$queue_time")"
+    gum style --padding "1 5" --border thick --border-foreground "$border_foreground_now_playing" "$(gum style --foreground "$foreground_now_playing" "$now_playing_message")" "" "$(gum style --foreground "$foreground_song_name" "$song_name") by $(gum style --foreground "$foreground_artist" "$artist")" "" "Album: $(gum style --foreground "$foreground_album" "$album")" "Duration: $(gum style --foreground "$foreground_duration" "$duration")" "Next: $(gum style --foreground "$foreground_next_song_name" "$next_song_name") by $(gum style --foreground "$foreground_next_artist" "$next_artist")" "Queue: $(gum style --foreground "$foreground_queue_count" "$queue_count")" "Play time: $(gum style --foreground "$foreground_queue_time" "$queue_time")"
 }
 
 decor() {
-    gum style --foreground 100 --bold "$1"
+    gum style --foreground "$foreground_bold" --bold "$1"
 }
 
 display_help() {
@@ -75,8 +71,8 @@ display_help() {
 15. Quit $(decor '(q)')
 16. Change song directory $(decor '(x)')
 
-NOTE :: Capital letters also work
+$(decor "$help_note_message")
 "
-    gum style --padding "1 5" --border double --border-foreground 240 "$help_text"
-    gum style --padding "1 5" --border double --border-foreground 245 "To GO BACK press $(decor 'u') or $(decor 'U')"
+    gum style --padding "$gum_padding" --border double --border-foreground "$border_foreground_help" "$help_text"
+    gum style --padding "$gum_padding" --border double --border-foreground "$border_foreground_help" "To GO BACK press $(decor 'u') or $(decor 'U')"
 }

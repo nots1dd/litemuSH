@@ -1,15 +1,15 @@
 queue_func() {
     clear
     display_logo
-    gum style --padding "1 3" --border double --border-foreground 240 "Add Song to Queue"
+    gum style --padding "$gum_padding" --border double --border-foreground "$gum_border_foreground" "Add Song to Queue"
 
-    selected_artist=$(ls *.mp3 | awk -F ' - ' '{ artist = substr($1, 1, 512); print artist}' | sort -u | gum choose --header "Choose artist" --limit 1 --height 30)
+    selected_artist=$(ls *.mp3 | awk -F ' - ' '{ artist = substr($1, 1, 512); print artist}' | sort -u | gum choose --header "$gum_select_artist_message" --cursor.foreground "$gum_selected_cursor_foreground" --selected.foreground "$gum_selected_text_foreground" --header.foreground "$gum_header_foreground" --limit 1 --height $gum_height)
     if [ "$selected_artist" = "user aborted" ]; then
-        gum confirm --default "Exit Litemus?" && exit || play
+        gum confirm --default --selected.foreground "$gum_confirm_selected_text_foreground" --unselected.foreground "$gum_confirm_unselected_text_foreground" --prompt.foreground "$gum_confirm_prompt_foreground" "Exit Litemus?" && exit || queue_func
     else
         clear
         display_logo
-        gum style --padding "1 5" --border double --border-foreground 212 "You selected artist:  $(gum style --foreground 200 "$selected_artist")"
+        gum style --padding "$gum_padding" --border double --border-foreground "$gum_border_foreground" "You selected artist:  $(gum style --foreground "$gum_artist_foreground" "$selected_artist")"
 
         # Filter songs by selected artist
         mapfile -t song_list < <(ls *.mp3 | grep "^$selected_artist" | sort)
@@ -27,11 +27,11 @@ queue_func() {
         fi
 
         # Present the list of song names to the user for selection
-        selected_song_display=$(printf "%s\n" "${song_display_list[@]}" | gum choose --header "Choose song" --limit 1 --height 30)
+        selected_song_display=$(printf "%s\n" "${song_display_list[@]}" | gum choose --header "$gum_select_song_message" --cursor.foreground "$gum_selected_cursor_foreground" --selected.foreground "$gum_selected_text_foreground" --header.foreground "$gum_header_foreground" --limit 1 --height $gum_height)
 
         
         if [ "$selected_song_display" = "user aborted" ]; then
-            gum confirm --default "Exit Litemus?" && exit || queue_func
+            gum confirm --default --selected.foreground "$gum_confirm_selected_text_foreground" --unselected.foreground "$gum_confirm_unselected_text_foreground" --prompt.foreground "$gum_confirm_prompt_foreground" "Exit Litemus?" && exit || queue_func
         else
             # Find the full name of the selected song
             selected_song=""
@@ -46,9 +46,10 @@ queue_func() {
             queue+=("$selected_song")
             clear
             display_logo
-            gum style --padding "1 5" --border double --border-foreground 212 "SUCCESS!" "Added to queue:  $(gum style --foreground 200 "$selected_song")"
-            gum spin --title="Redirecting..." -- sleep 0.2
+            gum style --padding "$gum_padding" --border double --border-foreground "$gum_border_foreground" "SUCCESS!" "Added to queue:  $(gum style --foreground "$gum_selected_artist_color" "$selected_song")"
+            gum spin --title="Redirecting..." -- sleep 0.3
             clear
+            load_theme "$theme_dir"
             display_song_info_minimal "${queue[$current_index]}" "$duration"
         fi
     fi

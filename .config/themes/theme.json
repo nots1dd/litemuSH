@@ -1,0 +1,42 @@
+{
+    "display_colors": {
+      "border_foreground": 21,
+      "border_foreground_help": 102,
+      "border_foreground_now_playing": 68,
+      "foreground_now_playing": 98,
+      "foreground_song_name": 140,
+      "foreground_artist": 68,
+      "foreground_album": 105,
+      "foreground_duration": 66,
+      "foreground_next_song_name": 24,
+      "foreground_next_artist": 25,
+      "foreground_queue_count": 67,
+      "foreground_queue_time": 135,
+      "foreground_bold": 100
+    },
+    "messages": {
+      "now_playing": "NOW PLAYING",
+      "help_note": "NOTE :: Capital letters also work"
+    },
+    "gum_colors": {
+        "border_foreground": 101,
+        "header_foreground": 100,
+        "selected_cursor_foreground": 67,
+        "selected_text_foreground": 65,
+        "selected_artist": 67,
+        "artist_foreground": 68,
+        "padding": "1 5",
+        "height": 35,
+        "error": 160
+    },
+    "gum_messages": {
+        "select_artist": "Choose your artist",
+        "select_song": "Choose song"
+    },
+    "gum_confirm_colors": {
+      "selected_text_foreground": 2,
+      "unselected_text_foreground": 240,
+      "prompt_foreground": 67
+    }
+  }
+  
