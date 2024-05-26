@@ -12,6 +12,9 @@ HEADER_COLOR='\033[0;32m'
 HEADER_BORDER_COLOR='\033[1;32m'
 BORDER_CHAR='═'
 
+INSTALL_DIR=$(gum input --placeholder="Enter the installation directory")
+SCRIPT_NAME="main.sh"
+
 # Function to print styled header
 print_header() {
     local text=" LITEMUS - Light Music Player "

@@ -17,3 +17,5 @@ source $src/functions/playback/monitor_pb.sh
 source $src/functions/playback/ffplay_index.sh # for ffplay
 source $src/functions/playback/time.sh
 source $src/functions/keybinds.sh
+source $src/functions/load_cache.sh
+source $src/functions/save_cache.sh

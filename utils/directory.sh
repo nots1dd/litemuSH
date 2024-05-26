@@ -22,8 +22,8 @@ directory_func() {
             if gum confirm "Directory '$directory' exists. Are you sure you want to use this directory?"; then
                 no=$(find "$directory" -type f -name "*.mp3" | wc -l)
                 if [ "$no" -ne 0 ]; then
-                    echo "" > "$cache" # ensuring nothing is there
-                    echo "$directory" > "$cache"
+                    echo "" > "$dir_cache" # ensuring nothing is there
+                    echo "$directory" > "$dir_cache"
                     cd "$directory"
                     clear
                     gum style --border normal --margin "1" --padding "1 2" --border-foreground 212 "Hello, there! Welcome to $(gum style --foreground 212 'LITEMUS')"
@@ -43,8 +43,8 @@ directory_func() {
 
 # Function to check and prompt for directory
 check_directory() {
-    if [ -f "$cache" ] && [ -s "$cache" ]; then
-        directory=$(cat "$cache")
+    if [ -f "$dir_cache" ] && [ -s "$dir_cache" ]; then
+        directory=$(cat "$dir_cache")
         if [ -d "$directory" ] && [ "$(find "$directory" -type f -name "*.mp3" | wc -l)" -gt 0 ]; then
             cd "$directory"
             return

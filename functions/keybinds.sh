@@ -55,7 +55,6 @@ keybinds() {
                 display_song_info_minimal "${queue[$current_index]}" "$duration"
                 ;;
             h|H)
-                clear
                 display_help
                 ;;
             j|J)

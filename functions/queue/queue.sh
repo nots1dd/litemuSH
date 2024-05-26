@@ -1,10 +1,11 @@
 queue_func() {
+    clear
     display_logo
-    gum style --padding "1 1" --border-foreground 240 "Add Song to Queue"
+    gum style --padding "1 3" --border double --border-foreground 240 "Add Song to Queue"
+
     selected_artist=$(ls *.mp3 | awk -F ' - ' '{ artist = substr($1, 1, 512); print artist}' | sort -u | gum choose --header "Choose artist" --limit 1 --height 30)
     if [ "$selected_artist" = "user aborted" ]; then
-        clear
-        display_song_info_minimal "${queue[$current_index]}" "$duration"
+        gum confirm --default "Exit Litemus?" && exit || play
     else
         clear
         display_logo
@@ -13,40 +14,28 @@ queue_func() {
         # Filter songs by selected artist
         mapfile -t song_list < <(ls *.mp3 | grep "^$selected_artist" | sort)
 
-        # Sort songs by album using ffprobe
-        declare -A album_sorted_songs
-        for song in "${song_list[@]}"; do
-            album=$(ffprobe -v quiet -print_format json -show_entries format_tags=album -of default=nw=1:nk=1 "$song")
-            album=${album:-"Unknown Album"}
-            album_sorted_songs["$album"]+="$song"$'\n' # TODO: Find a good way to giving new line to every song, right now there is a blank line between every album's songs
-        done
+        # Ensure cache directory exists
+        mkdir -p "$cache_dir"
+        local cache_file="$cache_dir/${selected_artist// /_}.cache"
 
-        # Convert associative array to a list of songs sorted by album
-        sorted_song_list=()
-        for album in "${!album_sorted_songs[@]}"; do
-            mapfile -t album_songs <<< "${album_sorted_songs[$album]}"
-            for song in "${album_songs[@]}"; do
-                if [ "$song" != "\n" ]; then
-                    sorted_song_list+=("$song")
-                fi
-            done
-        done
+        if [ -f "$cache_file" ]; then
+            load_sorted_songs_from_cache "$selected_artist"
+        else
+            sort_songs_by_album "$selected_artist"
+            save_sorted_songs_to_cache "$selected_artist"
+            gum spin --title="Caching artist..." -- sleep 0.3
+        fi
 
         # Present the list of song names to the user for selection
-        song_display_list=()
-        for song in "${sorted_song_list[@]}"; do
-            song_display_list+=("$(echo "$song" | awk -F ' - ' '{ print $2 }' | sed 's/\.mp3//')")
-        done
-
-        # Store the selected song display name in the variable "selected_song_display"
         selected_song_display=$(printf "%s\n" "${song_display_list[@]}" | gum choose --header "Choose song" --limit 1 --height 30)
+
         
         if [ "$selected_song_display" = "user aborted" ]; then
-            gum confirm --default "Exit Litemus?" && exit || play
+            gum confirm --default "Exit Litemus?" && exit || queue_func
         else
             # Find the full name of the selected song
             selected_song=""
-            for song in "${song_list[@]}"; do
+            for song in "${sorted_song_list[@]}"; do
                 song_name=$(echo "$song" | awk -F ' - ' '{ print $2 }' | sed 's/\.mp3//')
                 if [ "$song_name" = "$selected_song_display" ]; then
                     selected_song="$song"
@@ -58,12 +47,13 @@ queue_func() {
             clear
             display_logo
             gum style --padding "1 5" --border double --border-foreground 212 "SUCCESS!" "Added to queue:  $(gum style --foreground 200 "$selected_song")"
-            gum spin --title="Redirecting..." -- sleep 0.5
+            gum spin --title="Redirecting..." -- sleep 0.2
             clear
             display_song_info_minimal "${queue[$current_index]}" "$duration"
         fi
     fi
 }
+
 
 display_queue() {
     clear

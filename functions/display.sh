@@ -1,3 +1,23 @@
+calculate_time_left_in_queue() {
+    total_time_left=0
+
+    for ((i = current_index; i < ${#queue[@]}; i++)); do
+        song="${queue[$i]}"
+        song_duration=$(ffprobe -v quiet -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$song")
+
+        if [[ "$song_duration" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
+            total_time_left=$(echo "$total_time_left + $song_duration" | bc)
+        fi
+    done
+
+    # Convert total_time_left to minutes and seconds
+    minutes=$(echo "$total_time_left / 60" | bc)
+    seconds=$(echo "($total_time_left % 60) / 1" | bc)
+
+    echo "${minutes}m ${seconds}s"
+}
+
+
 display_song_info_minimal() {
     local song="$1"
     local duration="$2"
@@ -21,17 +41,42 @@ display_song_info_minimal() {
         next_artist="N/A"
     fi
 
-    queue_count=$(( ${#queue[@]} - 1 ))
+    queue_count=$(( ${#queue[@]} - current_index - 1 ))
+    queue_time=$(calculate_time_left_in_queue)
 
     # Display the song information
     display_logo
     viu --width 24 --height 10 ~/newtmp.png
-    gum style --padding "1 5" --border double --border-foreground 070 "$(gum style --foreground 101 'NOW PLAYING')" "" "$(gum style --foreground 066 "$song_name") by $(gum style --foreground 068 "$artist")" "" "Album: $(gum style --foreground 105 "$album")" "Duration: $(gum style --foreground 080 "$duration")" "Next: $(gum style --foreground 065 "$next_song_name") by $(gum style --foreground 100 "$next_artist")" "Queue: $(gum style --foreground 130 "$queue_count")"
+    gum style --padding "1 5" --border thick --border-foreground 070 "$(gum style --foreground 101 'NOW PLAYING')" "" "$(gum style --foreground 066 "$song_name") by $(gum style --foreground 068 "$artist")" "" "Album: $(gum style --foreground 105 "$album")" "Duration: $(gum style --foreground 080 "$duration")" "Next: $(gum style --foreground 065 "$next_song_name") by $(gum style --foreground 100 "$next_artist")" "Queue: $(gum style --foreground 130 "$queue_count")" "Play time: $(gum style --foreground 135 "$queue_time")"
+}
+
+decor() {
+    gum style --foreground 100 --bold "$1"
 }
 
 display_help() {
+    clear
     display_logo
-    gum style --padding "1 5" --border double --border-foreground 240 "1. Show help (h)" "2. Pause/Play (p)" "3. Replay current song (r)" "4. Add a song to queue (a)" "5. Display Queue (d)" "6. Next Song (n)" "7. Previous Song (b)" "8. Volume up (j)" "9. Volume down (k)" "10. Check current position (c)" "11. Lyrics (l)" "12. Go back (u)" "13. Kill and go back to menu (t)" "14. Silently go back to menu (s)" "15. Quit (q)" "16. Change song directory (x)" "" "NOTE :: Capital letters also work"
-    gum style --padding "1 5" --border double --border-foreground 245 "To GO BACK press u or U"
-    
+    help_text="
+1. Show help $(decor '(h)')
+2. Pause/Play $(decor '(p)')
+3. Replay current song $(decor '(r)')
+4. Add a song to queue $(decor '(a)')
+5. Display Queue $(decor '(d)')
+6. Next Song $(decor '(n)')
+7. Previous Song $(decor '(b)')
+8. Volume up $(decor '(j)')
+9. Volume down $(decor '(k)')
+10. Check current position $(decor '(c)')
+11. Lyrics $(decor '(l)')
+12. Go back $(decor '(u)')
+13. Kill and go back to menu $(decor '(t)')
+14. Silently go back to menu $(decor '(s)')
+15. Quit $(decor '(q)')
+16. Change song directory $(decor '(x)')
+
+NOTE :: Capital letters also work
+"
+    gum style --padding "1 5" --border double --border-foreground 240 "$help_text"
+    gum style --padding "1 5" --border double --border-foreground 245 "To GO BACK press $(decor 'u') or $(decor 'U')"
 }
