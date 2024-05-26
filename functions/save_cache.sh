@@ -4,7 +4,9 @@ save_sorted_songs_to_cache() {
     rm -f "$cache_file"
     for song in "${sorted_song_list[@]}"; do
         song_name=$(echo "$song" | awk -F ' - ' '{ print $2 }' | sed 's/\.mp3//')
-        echo "$song_name" >> "$cache_file"
+        if [ "$song_name" != "\n" ] || [ -z "$song_name" ]; then
+            echo "$song_name" >> "$cache_file"
+        fi
     done
 
 }
