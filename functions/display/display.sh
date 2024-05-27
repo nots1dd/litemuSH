@@ -1,3 +1,5 @@
+ # THIS FUNCTION IS O(n) so as the number of songs increases, the performance of this function decreases.
+ # As a result, displaying this function leads to slow rendering as the queue_count goes up
 calculate_time_left_in_queue() {
     total_time_left=0
 
@@ -39,11 +41,11 @@ display_song_info_minimal() {
     fi
 
     queue_count=$(( ${#queue[@]} - current_index - 1 ))
-    queue_time=$(calculate_time_left_in_queue)
+    #queue_time=$(calculate_time_left_in_queue)
 
     display_logo
-    viu --width 24 --height 10 ~/newtmp.png
-    gum style --padding "1 5" --border thick --border-foreground "$border_foreground_now_playing" "$(gum style --foreground "$foreground_now_playing" "$now_playing_message")" "" "$(gum style --foreground "$foreground_song_name" "$song_name") by $(gum style --foreground "$foreground_artist" "$artist")" "" "Album: $(gum style --foreground "$foreground_album" "$album")" "Duration: $(gum style --foreground "$foreground_duration" "$duration")" "Next: $(gum style --foreground "$foreground_next_song_name" "$next_song_name") by $(gum style --foreground "$foreground_next_artist" "$next_artist")" "Queue: $(gum style --foreground "$foreground_queue_count" "$queue_count")" "Play time: $(gum style --foreground "$foreground_queue_time" "$queue_time")"
+    viu --width 24 --height 10 "$image_dir"
+    gum style --padding "1 5" --border thick --border-foreground "$border_foreground_now_playing" "$(gum style --foreground "$foreground_now_playing" "$now_playing_message")" "" "$(gum style --foreground "$foreground_song_name" "$song_name") by $(gum style --foreground "$foreground_artist" "$artist")" "" "Album: $(gum style --foreground "$foreground_album" "$album")" "Duration: $(gum style --foreground "$foreground_duration" "$duration")" "Next: $(gum style --foreground "$foreground_next_song_name" "$next_song_name") by $(gum style --foreground "$foreground_next_artist" "$next_artist")" "Queue: $(gum style --foreground "$foreground_queue_count" "$queue_count")" # "Play time: $(gum style --foreground "$foreground_queue_time" "$queue_time")"
 }
 
 decor() {

@@ -41,7 +41,7 @@ load_theme() {
 
 reload_theme() {
     if load_theme "$theme_dir"; then
-        echo "Theme reloaded."
+        return
     else
         echo "Failed to reload theme."
     fi

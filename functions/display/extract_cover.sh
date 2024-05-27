@@ -6,7 +6,7 @@ extract_cover() {
 }
 
 copy_to_tmp() {
-    cp "$1" ~/newtmp.png
+    cp "$1" "$image_dir"
     # echo "Copied!"
 }
 

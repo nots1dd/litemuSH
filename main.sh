@@ -24,9 +24,10 @@ NC='\033[0m' # No Color
 BOLD='\033[1m'
 
 src="/home/$USER/misc/litemus" # change this to whatever directory litemus is in
-dir_cache="/home/$USER/misc/litemus/.directorycache" # change this to whatever directory litemus is in
-cache_dir="/home/$USER/misc/litemus/.cache/"
-theme_dir="/home/s1dd/misc/litemus/.config/themes/theme.json"
+dir_cache="$src/.directorycache"
+cache_dir="$src/.cache/songs/"
+theme_dir="$src/.config/themes/theme.json"
+image_dir="$src/.cache/image/tmp.png"
 
 # sources
 source $src/utils/modules.sh
@@ -52,7 +53,7 @@ play() {
     display_logo
     gum style --padding "$gum_padding" --border double --border-foreground "$gum_border_foreground" "Play a song!"
 
-    selected_artist=$(ls *.mp3 | awk -F ' - ' '{ artist = substr($1, 1, 512); print artist}' | sort -u | gum choose --header "$gum_select_artist_message" --cursor.foreground "$gum_selected_cursor_foreground" --selected.foreground "$gum_selected_text_foreground" --header.foreground "$gum_header_foreground" --limit 1 --height $gum_height)
+    selected_artist=$(ls *.mp3 | awk -F ' - ' '{ artist = substr($1, 1, 512); print artist}' | sort -u | gum choose --cursor-prefix=1 --header "$gum_select_artist_message" --cursor.foreground "$gum_selected_cursor_foreground" --selected.foreground "$gum_selected_text_foreground" --header.foreground "$gum_header_foreground" --limit 1 --height $gum_height)
     if [ "$selected_artist" = "user aborted" ]; then
         gum confirm --default --selected.foreground "$gum_confirm_selected_text_foreground" --unselected.foreground "$gum_confirm_unselected_text_foreground" --prompt.foreground "$gum_confirm_prompt_foreground" "Exit Litemus?" && exit || play
     else
@@ -76,26 +77,25 @@ play() {
         fi
 
         # Present the list of song names to the user for selection
-        selected_song_display=$(printf "%s\n" "${song_display_list[@]}" | gum choose --header "$gum_select_song_message" --cursor.foreground "$gum_selected_cursor_foreground" --selected.foreground "$gum_selected_text_foreground" --header.foreground "$gum_header_foreground" --limit 1 --height $gum_height)
+        selected_song_display=$(printf "%s\n" "${song_display_list[@]}" | gum choose --cursor-prefix=1 --header "$gum_select_song_message" --cursor.foreground "$gum_selected_cursor_foreground" --selected.foreground "$gum_selected_text_foreground" --header.foreground "$gum_header_foreground" --limit 1 --height $gum_height)
         
         if [ "$selected_song_display" = "user aborted" ] || [ -z "$selected_song_display" ]; then
             gum confirm --selected.foreground "$gum_confirm_selected_text_foreground" --unselected.foreground "$gum_confirm_unselected_text_foreground" --prompt.foreground "$gum_confirm_prompt_foreground" --default "Exit Litemus?" && exit || play
         else
             # Find the full name of the selected song
-            selected_song=""
-            for song in "${sorted_song_list[@]}"; do
-                song_name=$(echo "$song" | awk -F ' - ' '{ print $2 }' | sed 's/\.mp3//' | tr -d '\n')
+            selected_index=0
+            for i in "${!sorted_song_list[@]}"; do
+                song_name=$(echo "${sorted_song_list[$i]}" | awk -F ' - ' '{ print $2 }' | sed 's/\.mp3//' | tr -d '\n')
                 if [ "$song_name" = "$selected_song_display" ]; then
-                    selected_song="$song"
+                    selected_song="${sorted_song_list[$i]}"
+                    selected_index=$i
                     break
                 fi
             done
 
-            queue=("$selected_song" "${queue[@]}") # Add to the beginning of the queue
+            # Add the selected song and subsequent songs to the queue
+            queue=("${sorted_song_list[@]:$selected_index}")
             current_index=0
-
-            # Add the selected song to the played_songs array
-            played_songs+=("$selected_song")
 
             ffplay_song_at_index "$current_index"
         fi
@@ -108,7 +108,6 @@ play() {
 
 main() {
     clear
-    load_songs
     load_theme "$theme_dir"
     play
 }

@@ -31,7 +31,7 @@
     },
     "gum_messages": {
         "select_artist": "Choose your artist",
-        "select_song": "Choose song"
+        "select_song": "Choose your song"
     },
     "gum_confirm_colors": {
       "selected_text_foreground": 2,

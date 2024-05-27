@@ -19,6 +19,7 @@ keybinds() {
                 # Return to song selection menu
                 kill "$ffplay_pid" >/dev/null 2>&1
                 clear
+                queue=() # empty the queue (t should be pressed as a restart to music session)
                 play
                 ;;
             s|S)
@@ -89,6 +90,7 @@ keybinds() {
             y|Y)
                 reload_theme
                 display_song_info_minimal "${queue[$current_index]}" "$duration"
+                sleep 0.3
                 status_line="Theme reloaded."
                 ;;
                 

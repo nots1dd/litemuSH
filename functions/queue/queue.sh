@@ -3,7 +3,7 @@ queue_func() {
     display_logo
     gum style --padding "$gum_padding" --border double --border-foreground "$gum_border_foreground" "Add Song to Queue"
 
-    selected_artist=$(ls *.mp3 | awk -F ' - ' '{ artist = substr($1, 1, 512); print artist}' | sort -u | gum choose --header "$gum_select_artist_message" --cursor.foreground "$gum_selected_cursor_foreground" --selected.foreground "$gum_selected_text_foreground" --header.foreground "$gum_header_foreground" --limit 1 --height $gum_height)
+    selected_artist=$(ls *.mp3 | awk -F ' - ' '{ artist = substr($1, 1, 512); print artist}' | sort -u | gum choose --cursor-prefix=1 --header "$gum_select_artist_message" --cursor.foreground "$gum_selected_cursor_foreground" --selected.foreground "$gum_selected_text_foreground" --header.foreground "$gum_header_foreground" --limit 1 --height $gum_height)
     if [ "$selected_artist" = "user aborted" ]; then
         gum confirm --default --selected.foreground "$gum_confirm_selected_text_foreground" --unselected.foreground "$gum_confirm_unselected_text_foreground" --prompt.foreground "$gum_confirm_prompt_foreground" "Exit Litemus?" && exit || queue_func
     else
@@ -27,7 +27,7 @@ queue_func() {
         fi
 
         # Present the list of song names to the user for selection
-        selected_song_display=$(printf "%s\n" "${song_display_list[@]}" | gum choose --header "$gum_select_song_message" --cursor.foreground "$gum_selected_cursor_foreground" --selected.foreground "$gum_selected_text_foreground" --header.foreground "$gum_header_foreground" --limit 1 --height $gum_height)
+        selected_song_display=$(printf "%s\n" "${song_display_list[@]}" | gum choose --cursor-prefix=1 --header "$gum_select_song_message" --cursor.foreground "$gum_selected_cursor_foreground" --selected.foreground "$gum_selected_text_foreground" --header.foreground "$gum_header_foreground" --limit 1 --height $gum_height)
 
         
         if [ "$selected_song_display" = "user aborted" ]; then
@@ -43,7 +43,11 @@ queue_func() {
                 fi
             done
 
-            queue+=("$selected_song")
+            if [ $current_index -lt ${#queue[@]} ]; then
+                queue=("${queue[@]:0:$current_index+1}" "$selected_song" "${queue[@]:$current_index+1}")
+            else
+                queue+=("$selected_song")
+            fi
             clear
             display_logo
             gum style --padding "$gum_padding" --border double --border-foreground "$gum_border_foreground" "SUCCESS!" "Added to queue:  $(gum style --foreground "$gum_selected_artist_color" "$selected_song")"
