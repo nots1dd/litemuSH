@@ -1,4 +1,3 @@
-# Main play function
 save_sorted_songs_to_cache() {
     local cache_file="$cache_dir/${selected_artist// /_}.cache"
     rm -f "$cache_file"

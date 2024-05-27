@@ -62,7 +62,8 @@ play() {
     else
         clear
         display_logo
-        gum style --padding "$gum_padding" --border double --border-foreground "$gum_border_foreground" "You selected artist:  $(gum style --foreground "$gum_artist_foreground" "$selected_artist")"
+        songs_count=$(ls *.mp3 | grep "^$selected_artist" | wc -l)
+        gum style --padding "$gum_padding" --border double --border-foreground "$gum_border_foreground" "You selected artist:  $(gum style --foreground "$gum_artist_foreground" "$selected_artist") ($songs_count songs)"
 
         # Filter songs by selected artist
         mapfile -t song_list < <(ls *.mp3 | grep "^$selected_artist" | sort)
@@ -70,13 +71,14 @@ play() {
         # Ensure cache directory exists
         mkdir -p "$cache_dir"
         local cache_file="$cache_dir/${selected_artist// /_}.cache"
+        cache_songs_count=$(grep -v "^$" $cache_file | wc -l)
 
-        if [ -f "$cache_file" ]; then
+        if [ -f "$cache_file" ] && [ "$cache_songs_count" -eq "$songs_count" ]; then # NOTE: If you add a song and remove it, this condition will NOT detect it and will continue like nothing changed
             load_sorted_songs_from_cache "$selected_artist"
         else
             sort_songs_by_album "$selected_artist"
             save_sorted_songs_to_cache "$selected_artist"
-            gum spin --title="Caching artist..." -- sleep 0.3
+            gum spin --title="Caching artist..." -- sleep 0.2
         fi
 
         # Present the list of song names to the user for selection

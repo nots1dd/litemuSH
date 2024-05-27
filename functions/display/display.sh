@@ -119,25 +119,25 @@ display_help() {
     clear
     display_logo
     help_text="
-1. Show help $(decor '(h)')
-2. Pause/Play $(decor '(p)')
-3. Replay current song $(decor '(r)')
-4. Add a song to queue $(decor '(a)')
-5. Display Queue $(decor '(d)')
-6. Next Song $(decor '(n)')
-7. Previous Song $(decor '(b)')
-8. Volume up $(decor '(j)')
-9. Volume down $(decor '(k)')
-10. Check current position $(decor '(c)')
-11. Lyrics $(decor '(l)')
-12. Go back $(decor '(u)')
-13. Kill and go back to menu $(decor '(t)')
-14. Silently go back to menu $(decor '(s)')
-15. Quit $(decor '(q)')
-16. Change song directory $(decor '(x)')
+1. Show help  '(h)'
+2. Pause/Play  '(p)'
+3. Replay current song  '(r)'
+4. Add a song to queue '(a)'
+5. Display Queue  '(d)'
+6. Next Song  '(n)'
+7. Previous Song  '(b)'
+8. Volume up  '(j)'
+9. Volume down  '(k)'
+10. Check current position  '(c)'
+11. Lyrics  '(l)'
+12. Go back  '(u)'
+13. Kill and go back to menu  '(t)'
+14. Silently go back to menu  '(s)'
+15. Quit  '(q)'
+16. Change song directory  '(x)'
 
 $(decor "$help_note_message")
 "
     gum style --padding "$gum_padding" --border double --border-foreground "$border_foreground_help" "$help_text"
-    gum style --padding "$gum_padding" --border double --border-foreground "$border_foreground_help" "To GO BACK press $(decor 'u') or $(decor 'U')"
+    gum style --padding "$gum_padding" --border double --border-foreground "$border_foreground_help" "To GO BACK press'u' or 'U'"
 }
