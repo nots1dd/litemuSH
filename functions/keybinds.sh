@@ -38,6 +38,7 @@ keybinds() {
             q|Q)
                 kill "$ffplay_pid" >/dev/null 2>&1
                 echo "" > "$src/lyrics.md" # clean the file when quitting
+                rm -rf "$src/.cache/misc/*"
                 echo -e "\n${RED}Exiting...${NC}"
                 exit
                 ;;

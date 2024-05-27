@@ -11,6 +11,7 @@
       "foreground_next_song_name": 24,
       "foreground_next_artist": 25,
       "foreground_queue_count": 67,
+      "foreground_total_queue_count": 69,
       "foreground_queue_time": 135,
       "foreground_bold": 100
     },

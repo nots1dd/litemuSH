@@ -13,6 +13,7 @@
 # 4. viu (terminal image emulator) [AUR PACKAGE]
 # 5. grep, awk, trap (very important basic unix tools)
 # 6. jq (to parse json)
+# 7. amixer (for volume control using alsa-utils)
 
 # Define color variables
 RED='\033[0;31m'

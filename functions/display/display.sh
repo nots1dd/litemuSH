@@ -1,20 +1,72 @@
  # THIS FUNCTION IS O(n) so as the number of songs increases, the performance of this function decreases.
- # As a result, displaying this function leads to slow rendering as the queue_count goes up
+ # Hence, i have tried to increase efficiency of the function by creating cache, but initially if you are loading 15+ songs, you will notice a delay of 2-3 seconds.
+ # The current function now ONLY performs that loop when the queue count changes (so whenever you add songs to queue), when the current_index changes (going prev/next song), or if the cache files are not found
+ # The above fix makes sure that bloated and pointless tasks are not performed, which also technically reduces the time delay of this function
+ # Aside from this, I plan on customizing the display screen a bit more so in the future there will be an option to NOT display this, which will not lead to any inefficiencies or time delay
 calculate_time_left_in_queue() {
+    time_cache_file="$src/.cache/misc/time.cache"
+    cache_index_file="$src/.cache/misc/index.cache"
+    queue_count_file="$src/.cache/misc/queue_count.cache"
+
+    # Ensure the cache directory exists
+    mkdir -p "$(dirname "$time_cache_file")" > /dev/null 2>&1
+    mkdir -p "$(dirname "$cache_index_file")" > /dev/null 2>&1
+    mkdir -p "$(dirname "$queue_count_file")" > /dev/null 2>&1
+
     total_time_left=0
+    current_queue_count=${#queue[@]}
+    update_cache=false
 
-    for ((i = current_index; i < ${#queue[@]}; i++)); do
-        song="${queue[$i]}"
-        song_duration=$(ffprobe -v quiet -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$song")
+    # Read cache files if they exist
+    if [[ -f "$time_cache_file" && -f "$cache_index_file" && -f "$queue_count_file" ]]; then
+        cached_index=$(cat "$cache_index_file")
+        cached_queue_count=$(cat "$queue_count_file")
+        cached_total_time_left=$(cat "$time_cache_file")
 
-        if [[ "$song_duration" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
-            total_time_left=$(echo "$total_time_left + $song_duration" | bc)
+        # Determine if cache should be updated
+        if [[ "$cached_queue_count" -ne "$current_queue_count" ]]; then
+            update_cache=true
+        elif [[ "$cached_index" -lt "$current_index" ]]; then
+            # Next song played
+            prev_song_duration=$(ffprobe -v quiet -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "${queue[$cached_index]}")
+            total_time_left=$(awk "BEGIN {print $cached_total_time_left - $prev_song_duration}")
+            echo "$total_time_left" > "$time_cache_file"
+            echo "$current_index" > "$cache_index_file"
+            echo "$current_queue_count" > "$queue_count_file"
+        elif [[ "$cached_index" -gt "$current_index" ]]; then
+            # Previous song played
+            current_song_duration=$(ffprobe -v quiet -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "${queue[$current_index]}")
+            total_time_left=$(awk "BEGIN {print $cached_total_time_left + $current_song_duration}")
+            echo "$total_time_left" > "$time_cache_file"
+            echo "$current_index" > "$cache_index_file"
+            echo "$current_queue_count" > "$queue_count_file"
+        else
+            total_time_left=$cached_total_time_left
         fi
-    done
+    else
+        update_cache=true
+    fi
+
+    # Update cache if necessary
+    if [[ "$update_cache" == true ]]; then
+        for ((i = current_index; i < ${#queue[@]}; i++)); do
+            song="${queue[$i]}"
+            song_duration=$(ffprobe -v quiet -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$song")
+
+            if [[ "$song_duration" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
+                total_time_left=$(awk "BEGIN {print $total_time_left + $song_duration}")
+            fi
+        done
+
+        # Update the cache files
+        echo "$total_time_left" > "$time_cache_file"
+        echo "$current_index" > "$cache_index_file"
+        echo "$current_queue_count" > "$queue_count_file"
+    fi
 
     # Convert total_time_left to minutes and seconds
-    minutes=$(echo "$total_time_left / 60" | bc)
-    seconds=$(echo "($total_time_left % 60) / 1" | bc)
+    minutes=$(awk "BEGIN {print int($total_time_left / 60)}")
+    seconds=$(awk "BEGIN {print int($total_time_left % 60)}")
 
     echo "${minutes}m ${seconds}s"
 }
@@ -41,11 +93,12 @@ display_song_info_minimal() {
     fi
 
     queue_count=$(( ${#queue[@]} - current_index - 1 ))
-    #queue_time=$(calculate_time_left_in_queue)
+    total_queue_count=$((${#queue[@]} - 1))
+    queue_time=$(calculate_time_left_in_queue)
 
     display_logo
     viu --width 24 --height 10 "$image_dir"
-    gum style --padding "1 5" --border thick --border-foreground "$border_foreground_now_playing" "$(gum style --foreground "$foreground_now_playing" "$now_playing_message")" "" "$(gum style --foreground "$foreground_song_name" "$song_name") by $(gum style --foreground "$foreground_artist" "$artist")" "" "Album: $(gum style --foreground "$foreground_album" "$album")" "Duration: $(gum style --foreground "$foreground_duration" "$duration")" "Next: $(gum style --foreground "$foreground_next_song_name" "$next_song_name") by $(gum style --foreground "$foreground_next_artist" "$next_artist")" "Queue: $(gum style --foreground "$foreground_queue_count" "$queue_count")" # "Play time: $(gum style --foreground "$foreground_queue_time" "$queue_time")"
+    gum style --padding "1 5" --border thick --border-foreground "$border_foreground_now_playing" "$(gum style --foreground "$foreground_now_playing" "$now_playing_message")" "" "$(gum style --foreground "$foreground_song_name" "$song_name") by $(gum style --foreground "$foreground_artist" "$artist")" "" "Album: $(gum style --foreground "$foreground_album" "$album")" "Duration: $(gum style --foreground "$foreground_duration" "$duration")" "Next: $(gum style --foreground "$foreground_next_song_name" "$next_song_name") by $(gum style --foreground "$foreground_next_artist" "$next_artist")" "In Queue: $(gum style --foreground "$foreground_queue_count" "$queue_count") of $(gum style --foreground "$foreground_total_queue_count" "$total_queue_count")" "Play time: $(gum style --foreground "$foreground_queue_time" "$queue_time")"
 }
 
 decor() {

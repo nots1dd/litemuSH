@@ -12,6 +12,7 @@ load_theme() {
         foreground_next_song_name=$(jq -r '.display_colors.foreground_next_song_name' "$theme_file")
         foreground_next_artist=$(jq -r '.display_colors.foreground_next_artist' "$theme_file")
         foreground_queue_count=$(jq -r '.display_colors.foreground_queue_count' "$theme_file")
+        foreground_total_queue_count=$(jq -r '.display_colors.foreground_total_queue_count' "$theme_file")
         foreground_queue_time=$(jq -r '.display_colors.foreground_queue_time' "$theme_file")
         foreground_bold=$(jq -r '.display_colors.foreground_bold' "$theme_file")
         now_playing_message=$(jq -r '.messages.now_playing' "$theme_file")
