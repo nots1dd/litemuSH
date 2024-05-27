@@ -15,6 +15,8 @@
 # 6. jq (to parse json)
 # 7. amixer (for volume control using alsa-utils)
 
+# IF THIS SHELL SCRIPT IS NOT WORKING, try changing the $src variable to the actual directory of where litemus clone is located.
+
 # Define color variables
 RED='\033[0;31m'
 GREEN='\033[0;32m'

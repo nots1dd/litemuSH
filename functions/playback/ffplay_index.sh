@@ -8,6 +8,19 @@ ffplay_song_at_index() {
 
     current_index="$index"
     local song="${queue[$current_index]}"
+
+    # Check if the song name is null or whitespace
+    if [[ -z "$song" || "$song" =~ ^[[:space:]]*$ ]]; then
+        current_index=$((current_index + 1))
+        if [ "$current_index" -lt "${#queue[@]}" ]; then
+            ffplay_song_at_index "$current_index"
+        else
+            gum style --padding "$gum_padding" --border double --border-foreground "$gum_colors_error" "End of queue. Returning to song selection."
+            play
+        fi
+        return
+    fi
+
     selected_song="$song"
 
     clear
@@ -24,26 +37,24 @@ ffplay_song_at_index() {
     display_song_info_minimal "$song" "$duration"
     time=$(ffprobe -v quiet -print_format json -show_format -show_streams "$song" | jq -r '.format.duration')
 
-
     # Play the selected song using ffplay in the background and store the PID
     killall ffplay >/dev/null 2>&1
-    
+
     ffplay -nodisp -autoexit "$song" >/dev/null 2>&1 &
-    # playback_time
     ffplay_pid=$!
     keybinds
     wait $ffplay_pid
-    # for smooth transistion to the next song
+
+    # For smooth transition to the next song
     current_index=$((current_index + 1))
     if [ "$current_index" -lt "${#queue[@]}" ]; then
         ffplay_song_at_index "$current_index"
     else
-        gum style --padding "1 5" --border double --border-foreground 212 "End of queue. Returning to song selection."
+        gum style --padding "$gum_padding" --border double --border-foreground "$gum_colors_error" "End of queue. Returning to song selection."
         play
     fi
-
-
 }
+
 
 # Restart the current song
 ffrestart_song() {

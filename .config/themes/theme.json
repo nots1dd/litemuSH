@@ -38,6 +38,10 @@
       "selected_text_foreground": 2,
       "unselected_text_foreground": 240,
       "prompt_foreground": 67
+    },
+    "song_thumbnail": {
+      "width": 24,
+      "height": 10
     }
   }
   

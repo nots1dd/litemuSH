@@ -33,6 +33,9 @@ load_theme() {
         gum_confirm_selected_text_foreground=$(jq -r '.gum_confirm_colors.selected_text_foreground' "$theme_file")
         gum_confirm_unselected_text_foreground=$(jq -r '.gum_confirm_colors.unselected_text_foreground' "$theme_file")
         gum_confirm_prompt_foreground=$(jq -r '.gum_confirm_colors.prompt_foregroud' "$theme_file")
+        # viu image
+        image_width=$(jq -r '.song_thumbnail.width' "$theme_file")
+        image_height=$(jq -r '.song_thumbnail.height' "$theme_file")
     else
         gum style --border-foreground "$gum_colors_error" "Theme file not found!"
         sleep 0.5

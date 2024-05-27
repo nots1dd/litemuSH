@@ -83,8 +83,17 @@ display_song_info_minimal() {
 
     clear
 
-    if [ "$current_index" -lt "$((${#queue[@]} - 1))" ]; then
-        next_song="${queue[$((current_index + 1))]}"
+    # Find the next valid song
+    next_index=$((current_index + 1))
+    while [ "$next_index" -lt "${#queue[@]}" ]; do
+        next_song="${queue[$next_index]}"
+        if [[ -n "$next_song" && ! "$next_song" =~ ^[[:space:]]*$ ]]; then
+            break
+        fi
+        next_index=$((next_index + 1))
+    done
+
+    if [ "$next_index" -lt "${#queue[@]}" ]; then
         next_song_name=$(echo "$next_song" | awk -F ' - ' '{ print $2 }' | sed 's/\.mp3//' | tr -d '\n')
         next_artist=$(ffprobe -v quiet -print_format json -show_entries format_tags=artist -of default=nw=1:nk=1 "$next_song")
     else
@@ -97,9 +106,10 @@ display_song_info_minimal() {
     queue_time=$(calculate_time_left_in_queue)
 
     display_logo
-    viu --width 24 --height 10 "$image_dir"
+    viu --width "$image_width" --height "$image_height" "$image_dir"
     gum style --padding "1 5" --border thick --border-foreground "$border_foreground_now_playing" "$(gum style --foreground "$foreground_now_playing" "$now_playing_message")" "" "$(gum style --foreground "$foreground_song_name" "$song_name") by $(gum style --foreground "$foreground_artist" "$artist")" "" "Album: $(gum style --foreground "$foreground_album" "$album")" "Duration: $(gum style --foreground "$foreground_duration" "$duration")" "Next: $(gum style --foreground "$foreground_next_song_name" "$next_song_name") by $(gum style --foreground "$foreground_next_artist" "$next_artist")" "In Queue: $(gum style --foreground "$foreground_queue_count" "$queue_count") of $(gum style --foreground "$foreground_total_queue_count" "$total_queue_count")" "Play time: $(gum style --foreground "$foreground_queue_time" "$queue_time")"
 }
+
 
 decor() {
     gum style --foreground "$foreground_bold" --bold "$1"

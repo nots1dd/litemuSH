@@ -13,7 +13,7 @@ HEADER_BORDER_COLOR='\033[1;32m'
 BORDER_CHAR='═'
 
 INSTALL_DIR=$(gum input --placeholder="Enter the installation directory")
-SCRIPT_NAME="main.sh"
+SCRIPT_NAME="lmus"
 
 # Function to print styled header
 print_header() {
