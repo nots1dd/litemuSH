@@ -59,6 +59,23 @@ d. Make sure you have run `install.sh` FIRST before running lmus (install script
 
 **NOTE :: YOU SHOULD RUN THIS SCRIPT AT YOUR OWN DISCRETION, BE AWARE OF WHAT THE SCRIPT DOES AND ITS FUNCTIONALITIES BEFORE EXECUTING.**
 
+### CONFIGURATION
+#### Themes:
+At the moment, there is a simple `.config/themes/theme.json` which has my config in it, which is being called by `jq`. Feel free to create a pr with more unique and clean themes 
+
+(tip: Pressing `Y` while in player will auto-reload the theme)
+
+#### DE / WM:
+As I use Hyprland, here are some things I recommend to add to your `hyprland.conf` to get the best out of litemus
+
+`windowrulev2 = float,class:^(kitty)$,title:^(lmus)$`
+
+`windowrulev2 = move 500 50,class:^(kitty)$,title:^(lmus)$`
+
+`windowrulev2 = size 50% 90%,class:^(kitty)$,title:^(lmus)$`
+
+For other distros recommendations / integrations that will make litemus look and work amazing, test it out yourself and create a pr
+
 ### FUTURE
 - [x] Update script to accept characters like `'` and others **[priority/high]**
 
