@@ -36,7 +36,7 @@ read_lmus_src_cache() {
         src=$(<"$cache_file")
     else
         # Find the directory using find command
-        src=$(find ~ -type d -name "litemus" 2>/dev/null)
+        src=$(find ~ -type d -name "litemus" 2>/dev/null | head -n 1)
         
         # Add directory path to cache file
         echo "$src" > "$cache_file"
