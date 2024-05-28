@@ -30,6 +30,14 @@ In terms of watt-hours consumed by the entire process, it was on average **5-8.5
 
 ### INSTALLATION GUIDE
 #### NOTE: Currently this is tried and tested only on Arch Linux (6.8.9-zen1-1-zen)
+#### USING PKGBUILD
+If you want to install lmus using `PKGBUILD`:
+
+-> Download the `PKGBUILD` file ONLY 
+
+-> Whichever chosen directory it is downloaded in, run `makepkg -si`
+
+#### CLONING REPOSITORY
 1. Building Requirements :
 
 Since ffmpeg is a vital tool in most operating systems, and smenu can be built in virtually any unix based OS, **building** all the dependencies is not a big issue.
