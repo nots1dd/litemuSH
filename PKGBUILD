@@ -13,8 +13,11 @@ sha256sums=('SKIP') # Replace 'SKIP' with the actual checksum
 
 pkgver() {
   cd "$srcdir/litemus"
-  git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
+  # Fallback to a simpler versioning scheme if git describe fails
+  git_version=$(git describe --long --tags 2>/dev/null || git rev-parse --short HEAD)
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$git_version"
 }
+
 
 build() {
   cd "$srcdir/litemus"
