@@ -26,9 +26,27 @@ PINK='\033[1;35m'
 NC='\033[0m' # No Color
 BOLD='\033[1m'
 
-src="/home/$USER/misc/litemus" # change this to whatever directory litemus is in
+# Check if source cache file exists
+read_lmus_src_cache() {
+    mkdir -p ".cache/lmus" > /dev/null 2>&1
+    local cache_file=".cache/lmus/lmus_src.cache" # this is your home/$USER's cache directory NOT lmus'
+
+    if [ -f "$cache_file" ]; then
+        # Read directory path from cache file
+        src=$(<"$cache_file")
+    else
+        # Find the directory using find command
+        src=$(find ~ -type d -name "litemus" 2>/dev/null)
+        
+        # Add directory path to cache file
+        echo "$src" > "$cache_file"
+    fi
+}
+read_lmus_src_cache
+
+
 dir_cache="$src/.directorycache"
-cache_dir="$src/.cache/songs/"
+cache_dir="$src/.cache/songs"
 theme_dir="$src/.config/themes/theme.json"
 image_dir="$src/.cache/image/tmp.png"
 
@@ -71,6 +89,7 @@ play() {
         # Ensure cache directory exists
         mkdir -p "$cache_dir"
         local cache_file="$cache_dir/${selected_artist// /_}.cache"
+        touch "$cache_file" # ensuring this exists and is null
         cache_songs_count=$(grep -v "^$" $cache_file | wc -l)
 
         if [ -f "$cache_file" ] && [ "$cache_songs_count" -eq "$songs_count" ]; then # NOTE: If you add a song and remove it, this condition will NOT detect it and will continue like nothing changed
@@ -79,10 +98,11 @@ play() {
             sort_songs_by_album "$selected_artist"
             save_sorted_songs_to_cache "$selected_artist"
             gum spin --title="Caching artist..." -- sleep 0.2
+            load_sorted_songs_from_cache "$selected_artist"
         fi
 
         # Present the list of song names to the user for selection
-        selected_song_display=$(printf "%s\n" "${song_display_list[@]}" | gum choose --cursor-prefix=1 --header "$gum_select_song_message" --cursor.foreground "$gum_selected_cursor_foreground" --selected.foreground "$gum_selected_text_foreground" --header.foreground "$gum_header_foreground" --limit 1 --height $gum_height)
+        selected_song_display=$(printf "%s\n" "${song_display_list[@]}" | grep -v "^$" | gum choose --cursor-prefix=1 --header "$gum_select_song_message" --cursor.foreground "$gum_selected_cursor_foreground" --selected.foreground "$gum_selected_text_foreground" --header.foreground "$gum_header_foreground" --limit 1 --height $gum_height)
         
         if [ "$selected_song_display" = "user aborted" ] || [ -z "$selected_song_display" ]; then
             gum confirm --selected.foreground "$gum_confirm_selected_text_foreground" --unselected.foreground "$gum_confirm_unselected_text_foreground" --prompt.foreground "$gum_confirm_prompt_foreground" --default "Exit Litemus?" && exit || play
