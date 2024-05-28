@@ -23,6 +23,12 @@ ffplay_song_at_index() {
 
     selected_song="$song"
 
+    # Play the selected song using ffplay in the background and store the PID
+    killall ffplay >/dev/null 2>&1
+
+    ffplay -nodisp -autoexit "$song" >/dev/null 2>&1 &
+    ffplay_pid=$!
+
     clear
     display_logo
     cover_image=$(extract_cover "$song")
@@ -36,12 +42,6 @@ ffplay_song_at_index() {
     load_theme "$theme_dir"
     display_song_info_minimal "$song" "$duration"
     time=$(ffprobe -v quiet -print_format json -show_format -show_streams "$song" | jq -r '.format.duration')
-
-    # Play the selected song using ffplay in the background and store the PID
-    killall ffplay >/dev/null 2>&1
-
-    ffplay -nodisp -autoexit "$song" >/dev/null 2>&1 &
-    ffplay_pid=$!
     keybinds
     wait $ffplay_pid
 

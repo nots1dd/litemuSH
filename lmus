@@ -28,8 +28,8 @@ BOLD='\033[1m'
 
 # Check if source cache file exists
 read_lmus_src_cache() {
-    mkdir -p ".cache/lmus" > /dev/null 2>&1
-    local cache_file=".cache/lmus/lmus_src.cache" # this is your home/$USER's cache directory NOT lmus'
+    mkdir -p "/home/$USER/.cache/lmus" > /dev/null 2>&1
+    local cache_file="/home/$USER/.cache/lmus/lmus_src.cache" # this is your home/$USER's cache directory NOT lmus'
 
     if [ -f "$cache_file" ]; then
         # Read directory path from cache file
@@ -75,7 +75,7 @@ play() {
     gum style --padding "$gum_padding" --border double --border-foreground "$gum_border_foreground" "Play a song!"
 
     selected_artist=$(ls *.mp3 | awk -F ' - ' '{ artist = substr($1, 1, 512); print artist}' | sort -u | gum choose --cursor-prefix=1 --header "$gum_select_artist_message" --cursor.foreground "$gum_selected_cursor_foreground" --selected.foreground "$gum_selected_text_foreground" --header.foreground "$gum_header_foreground" --limit 1 --height $gum_height)
-    if [ "$selected_artist" = "user aborted" ]; then
+    if [ "$selected_artist" = "" ]; then
         gum confirm --default --selected.foreground "$gum_confirm_selected_text_foreground" --unselected.foreground "$gum_confirm_unselected_text_foreground" --prompt.foreground "$gum_confirm_prompt_foreground" "Exit Litemus?" && exit || play
     else
         clear
@@ -104,7 +104,7 @@ play() {
         # Present the list of song names to the user for selection
         selected_song_display=$(printf "%s\n" "${song_display_list[@]}" | grep -v "^$" | gum choose --cursor-prefix=1 --header "$gum_select_song_message" --cursor.foreground "$gum_selected_cursor_foreground" --selected.foreground "$gum_selected_text_foreground" --header.foreground "$gum_header_foreground" --limit 1 --height $gum_height)
         
-        if [ "$selected_song_display" = "user aborted" ] || [ -z "$selected_song_display" ]; then
+        if [ "$selected_song_display" = "" ] || [ -z "$selected_song_display" ]; then
             gum confirm --selected.foreground "$gum_confirm_selected_text_foreground" --unselected.foreground "$gum_confirm_unselected_text_foreground" --prompt.foreground "$gum_confirm_prompt_foreground" --default "Exit Litemus?" && exit || play
         else
             # Find the full name of the selected song

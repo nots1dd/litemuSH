@@ -17,7 +17,7 @@
     },
     "messages": {
       "now_playing": "NOW PLAYING",
-      "help_note": "NOTE :: Capital letters also work"
+      "show_time_in_queue": false
     },
     "gum_colors": {
         "border_foreground": 101,

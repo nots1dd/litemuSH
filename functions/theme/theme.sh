@@ -16,7 +16,6 @@ load_theme() {
         foreground_queue_time=$(jq -r '.display_colors.foreground_queue_time' "$theme_file")
         foreground_bold=$(jq -r '.display_colors.foreground_bold' "$theme_file")
         now_playing_message=$(jq -r '.messages.now_playing' "$theme_file")
-        help_note_message=$(jq -r '.messages.help_note' "$theme_file")
         # gum colors
         gum_border_foreground=$(jq -r '.gum_colors.border_foreground' "$theme_file")
         gum_selected_artist_color=$(jq -r '.gum_colors.selected_artist' "$theme_file")
@@ -36,6 +35,8 @@ load_theme() {
         # viu image
         image_width=$(jq -r '.song_thumbnail.width' "$theme_file")
         image_height=$(jq -r '.song_thumbnail.height' "$theme_file")
+        # calculate_time_left_in_queue
+        show_time_in_queue=$(jq -r '.messages.show_time_in_queue' "$theme_file")
     else
         gum style --border-foreground "$gum_colors_error" "Theme file not found!"
         sleep 0.5

@@ -103,11 +103,17 @@ display_song_info_minimal() {
 
     queue_count=$(( ${#queue[@]} - current_index - 1 ))
     total_queue_count=$((${#queue[@]} - 1))
-    queue_time=$(calculate_time_left_in_queue)
+    if [ "$show_time_in_queue" = "false" ]; then
+        queue_time=""
+    elif [ "$show_time_in_queue" = "true" ]; then
+        queue_time="Play time: $(gum style --foreground "$foreground_queue_time" "$(calculate_time_left_in_queue)")"
+    else
+        queue_time=""
+    fi
 
     display_logo
     viu --width "$image_width" --height "$image_height" "$image_dir"
-    gum style --padding "1 5" --border thick --border-foreground "$border_foreground_now_playing" "$(gum style --foreground "$foreground_now_playing" "$now_playing_message")" "" "$(gum style --foreground "$foreground_song_name" "$song_name") by $(gum style --foreground "$foreground_artist" "$artist")" "" "Album: $(gum style --foreground "$foreground_album" "$album")" "Duration: $(gum style --foreground "$foreground_duration" "$duration")" "Next: $(gum style --foreground "$foreground_next_song_name" "$next_song_name") by $(gum style --foreground "$foreground_next_artist" "$next_artist")" "In Queue: $(gum style --foreground "$foreground_queue_count" "$queue_count") of $(gum style --foreground "$foreground_total_queue_count" "$total_queue_count")" "Play time: $(gum style --foreground "$foreground_queue_time" "$queue_time")"
+    gum style --padding "$gum_padding" --border thick --border-foreground "$border_foreground_now_playing" "" "$(gum style --foreground "$foreground_now_playing" "$now_playing_message")" "" "$(gum style --foreground "$foreground_song_name" "$song_name") by $(gum style --foreground "$foreground_artist" "$artist")" "" "Album: $(gum style --foreground "$foreground_album" "$album")" "Duration: $(gum style --foreground "$foreground_duration" "$duration")" "Next: $(gum style --foreground "$foreground_next_song_name" "$next_song_name") by $(gum style --foreground "$foreground_next_artist" "$next_artist")" "In Queue: $(gum style --foreground "$foreground_queue_count" "$queue_count") of $(gum style --foreground "$foreground_total_queue_count" "$total_queue_count")" "$queue_time"
 }
 
 
@@ -136,7 +142,7 @@ display_help() {
 15. Quit  '(q)'
 16. Change song directory  '(x)'
 
-$(decor "$help_note_message")
+$(decor "NOTE :: Capital letters also work")
 "
     gum style --padding "$gum_padding" --border double --border-foreground "$border_foreground_help" "$help_text"
     gum style --padding "$gum_padding" --border double --border-foreground "$border_foreground_help" "To GO BACK press'u' or 'U'"

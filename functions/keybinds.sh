@@ -2,9 +2,7 @@ keybinds() {
     time=""
     # Loop to continuously handle user input
     while kill -0 $ffplay_pid 2>/dev/null; do
-        if [[ $paused -eq 0 ]]; then
-            time=$(ps -o etime= --no-headers -p $ffplay_pid)
-        fi
+        get_current_position
         read -t 1 -n 1 -s key
         case $key in
             p|P)
@@ -44,8 +42,11 @@ keybinds() {
                 ;;
             c|C)
                 # Check current position
-                status_line="\rPlayback:$time"
+                status_line="\rPlayback:$current_time"
                 ;;
+            # f|F)
+            #     fast_forward
+            #     ;;
             l|L)
                 # Extract and display lyrics
                 status_line=""
@@ -75,9 +76,6 @@ keybinds() {
                 clear
                 display_queue
                 ;;
-            # f|F)
-            #     forward_song_5_seconds
-            #     ;;
             r|R)
                 ffrestart_song
                 ;;
