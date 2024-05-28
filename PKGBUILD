@@ -21,13 +21,11 @@ pkgver() {
 
 build() {
   cd "$srcdir/litemus"
-  # No need for configure script, assuming the build process is handled by Makefile
-  make
 }
 
 package() {
   cd "$srcdir/litemus"
-  make DESTDIR="$pkgdir/" install
+#   make DESTDIR="$pkgdir/" install
   # Ensure that license file is included in the package
   install -Dm755 lmus "$pkgdir/usr/bin/lmus"
   install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
