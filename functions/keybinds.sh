@@ -56,9 +56,11 @@ keybinds() {
             u|U)
                 clear
                 display_song_info_minimal "${queue[$current_index]}" "$duration"
+                status_line="" # set this to null so that the previous status line doesnt get echoed
                 ;;
             h|H)
                 display_help
+                status_line=""
                 ;;
             j|J)
                 increase_volume
