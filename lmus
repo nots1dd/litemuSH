@@ -44,7 +44,7 @@ read_lmus_src_cache() {
 }
 read_lmus_src_cache
 
-
+# env vars
 dir_cache="$src/.directorycache"
 cache_dir="$src/.cache/songs"
 theme_dir="$src/.config/themes/theme.json"

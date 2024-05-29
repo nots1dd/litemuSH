@@ -1,5 +1,6 @@
 # all sources go here
 source $src/lyrics/zsh_lyrics.sh
+source $src/functions/display/helper.sh
 source $src/utils/directory.sh
 source $src/functions/display/extract_cover.sh
 source $src/functions/playback/toggle_playback.sh

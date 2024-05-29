@@ -10,6 +10,10 @@ save_sorted_songs_to_cache() {
 
 }
 
+# The below function is sort of slow. Feel free to find any inefficiencies in the code and open a pr explaining so
+# This appears to be the only aspect of litemus that hinders its speed by a decent margin
+# Songs more than 10 take around 4-5 seconds to sort and display
+# This is also the reason why we cache this info, so that the next time till the user wants to update cache, it will only take 0.5-1s max to render
 # sorting is by album + track + disc (if present)
 sort_songs_by_album() {
     local selected_artist="$1"
@@ -17,17 +21,12 @@ sort_songs_by_album() {
     # Sort songs by album, disc, and track number using ffprobe
     declare -A album_sorted_songs
 
-    for song in "${song_list[@]}"; do
-        album=$(ffprobe -v quiet -print_format default=nw=1:nk=1 -show_entries format_tags=album "$song")
-        album=${album:-"Unknown Album"}
-        
-        track_info=$(ffprobe -v quiet -print_format default=nw=1:nk=1 -show_entries format_tags=track "$song")
-        track=$(echo "$track_info" | awk -F '/' '{ print $1 }')
-        track=${track:-0}  # Default track number to 0 if not found or empty
-
-        disc_info=$(ffprobe -v quiet -print_format default=nw=1:nk=1 -show_entries format_tags=disc "$song")
-        disc=$(echo "$disc_info" | awk -F '/' '{ print $1 }')
-        disc=${disc:-0}  # Default disc number to 0 if not found or empty
+    # Read all song metadata in one pass and parse necessary information
+    while IFS= read -r song; do
+        metadata=$(ffprobe -v quiet -print_format json -show_entries format_tags=album,track,disc "$song")
+        album=$(echo "$metadata" | jq -r '.format.tags.album // "Unknown Album"')
+        track=$(echo "$metadata" | jq -r '.format.tags.track // "0"' | awk -F '/' '{ print $1 }')
+        disc=$(echo "$metadata" | jq -r '.format.tags.disc // "0"' | awk -F '/' '{ print $1 }')
 
         # Pad disc and track number with zeros for proper sorting
         track=$(printf "%04d" "$track")
@@ -35,7 +34,7 @@ sort_songs_by_album() {
 
         # Append song to album_sorted_songs array with a key "album disc track"
         album_sorted_songs["$album"]+="$disc$track:$song"$'\n'
-    done
+    done < <(printf "%s\n" "${song_list[@]}")
 
     # Convert associative array to a list of songs sorted by album, disc, and track number
     sorted_song_list=()
@@ -54,6 +53,6 @@ sort_songs_by_album() {
 
     # Create song display list
     for song in "${sorted_song_list[@]}"; do
-        song_display_list+=("$(echo "$song" | awk -F ' - ' '{ print $2 }' | sed 's/\.mp3//')")
+        song_display_list+=("$(basename "$song" .mp3 | awk -F ' - ' '{ print $2 }')")
     done
 }

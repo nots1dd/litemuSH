@@ -1,5 +1,5 @@
 # Maintainer: Siddharth Karanam <sid9.karanam@gmail.com>
-pkgname=litemus
+pkgname=litemus-git
 pkgver=1.0.0
 pkgrel=1
 pkgdesc="A lightweight music player written in shell"

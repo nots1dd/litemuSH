@@ -51,6 +51,7 @@ ffplay_song_at_index() {
         ffplay_song_at_index "$current_index"
     else
         gum style --padding "$gum_padding" --border double --border-foreground "$gum_colors_error" "End of queue. Returning to song selection."
+        sleep 0.3
         play
     fi
 }

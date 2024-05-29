@@ -16,13 +16,14 @@
 
 ### Features (Currently)
 1. Very light weight (no bloat)
-2. Efficient extraction of a downloaded song's metadata (thumbnail, duration and lyrics only for now)
+2. Efficient extraction of a downloaded song's metadata (**thumbnail**, **duration**, **lyrics** and so on)
 3. A basic yet clean tui to interact with thanks to gum
-4. Essential options like Pause, Play, Quit, volume control and player control (prev/next song) all are implemented
+4. Essential options like Pause, Play, Quit, volume control and player control (prev/next song/restart song) all are implemented
 5. Ability to add items to queue and play them
-6. Other modes like `kill and return` and `silent return` and `lyrics view` are also available
-7. Easy **THEME** configuration read `.config/theme.md`
-8. Cache of songs and other data for faster parsing and efficiency (setup `.cache`)
+6. Sorting of songs by album, track and disc using metadata (works decently fast, also is cached)
+7. Other modes like `kill and return` and `silent return` and `lyrics view` are also available
+8. Easy **THEME** configuration read `.config/themes/theme_conf.md`
+9. Cache of songs and other data for faster parsing and efficiency (setup `.cache`)
 
 In terms of watt-hours consumed by the entire process, it was on average **5-8.5m/s** (seen on powertop)
 ![2024-05-14_17-27-25](https://github.com/nots1dd/litemus/assets/140317709/3293cb4a-cd03-4f4d-a425-c1b2497dcf0b)
@@ -69,7 +70,9 @@ d. Make sure you have run `install.sh` FIRST before running lmus (install script
 
 ### CONFIGURATION
 #### Themes:
-At the moment, there is a simple `.config/themes/theme.json` which has my config in it, which is being called by `jq`. Feel free to create a pr with more unique and clean themes 
+At the moment, there is a simple `.config/themes/theme.json` which has my config in it, which is being called by `jq`. Feel free to create a pr with more unique and clean themes
+
+-> For more information on how the `theme.json` works, look at `.config/themes/theme_conf.md`
 
 (tip: Pressing `Y` while in player will auto-reload the theme)
 
