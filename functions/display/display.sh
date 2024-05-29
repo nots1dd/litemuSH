@@ -71,27 +71,51 @@ calculate_time_left_in_queue() {
     echo "${minutes}m ${seconds}s"
 }
 
-
 display_song_info_minimal() {
     local song="$1"
     local duration="$2"
     local status="$3"
 
-    song_name=$(echo "$song" | awk -F ' - ' '{ print $2 }' | sed 's/\.mp3//' | tr -d '\n')
-    artist=$(ffprobe -v quiet -print_format json -show_entries format_tags=artist -of default=nw=1:nk=1 "$song")
-    album=$(ffprobe -v quiet -print_format json -show_entries format_tags=album -of default=nw=1:nk=1 "$song")
+    cache_misc_dir="$src/.cache/misc"
+
+    # Create the cache directory if it doesn't exist
+    mkdir -p "$cache_misc_dir"
+
+    # Create a unique cache file name based on the song path
+    cache_file="$cache_misc_dir/songinfo.cache"
+    rm -rf "$cache_file"
+
+    # Function to retrieve and cache song metadata
+    cache_song_metadata() {
+        song_name=$(echo "$song" | awk -F ' - ' '{ print $2 }' | sed 's/\.mp3//' | tr -d '\n')
+        artist=$(ffprobe -v quiet -print_format json -show_entries format_tags=artist -of default=nw=1:nk=1 "$song")
+        album=$(ffprobe -v quiet -print_format json -show_entries format_tags=album -of default=nw=1:nk=1 "$song")
+        year=$(ffprobe -v quiet -print_format json -show_entries format_tags=date -of default=nw=1:nk=1 "$song" | awk -F '-' '{print $1}')
+
+        # Write metadata to cache file
+        echo "$song_name" > "$cache_file"
+        echo "$artist" >> "$cache_file"
+        echo "$album" >> "$cache_file"
+        echo "$year" >> "$cache_file"
+        echo "$duration" >> "$cache_file"
+    }
+
+    # Check if metadata is already cached
+    if [ -f "$cache_file" ]; then
+        song_name=$(cat "$cache_file" | head -n 1)
+        artist=$(cat "$cache_file" | head -n 2)
+        album=$(cat "$cache_file" | head -n 3)
+        year=$(cat "$cache_file" | head -n 4)
+        duration=$(cat "$cache_file" | head -n 5)
+    else
+        cache_song_metadata
+    fi
 
     clear
 
     # Find the next valid song
     next_index=$((current_index + 1))
-    while [ "$next_index" -lt "${#queue[@]}" ]; do
-        next_song="${queue[$next_index]}"
-        if [[ -n "$next_song" && ! "$next_song" =~ ^[[:space:]]*$ ]]; then
-            break
-        fi
-        next_index=$((next_index + 1))
-    done
+    next_song="${queue[$next_index]}"
 
     if [ "$next_index" -lt "${#queue[@]}" ]; then
         next_song_name=$(echo "$next_song" | awk -F ' - ' '{ print $2 }' | sed 's/\.mp3//' | tr -d '\n')
@@ -113,9 +137,8 @@ display_song_info_minimal() {
 
     display_logo
     viu --width "$image_width" --height "$image_height" "$image_dir"
-    gum style --padding "$gum_padding" --border thick --border-foreground "$border_foreground_now_playing" "" "$(gum style --foreground "$foreground_now_playing" "$now_playing_message")" "" "$(gum style --foreground "$foreground_song_name" "$song_name") by $(gum style --foreground "$foreground_artist" "$artist")" "" "Album: $(gum style --foreground "$foreground_album" "$album")" "Duration: $(gum style --foreground "$foreground_duration" "$duration")" "Next: $(gum style --foreground "$foreground_next_song_name" "$next_song_name") by $(gum style --foreground "$foreground_next_artist" "$next_artist")" "In Queue: $(gum style --foreground "$foreground_queue_count" "$queue_count") of $(gum style --foreground "$foreground_total_queue_count" "$total_queue_count")" "$queue_time"
+    gum style --padding "$gum_padding" --border thick --border-foreground "$border_foreground_now_playing" "" "$(gum style --foreground "$foreground_now_playing" "$now_playing_message")" "" "$(gum style --foreground "$foreground_song_name" "$song_name") by $(gum style --foreground "$foreground_artist" "$artist")" "" "Album: $(gum style --foreground "$foreground_album" "$album")" "Year: $(gum style --foreground "$foreground_year" "$year")" "Duration: $(gum style --foreground "$foreground_duration" "$duration")" "Next: $(gum style --foreground "$foreground_next_song_name" "$next_song_name") by $(gum style --foreground "$foreground_next_artist" "$next_artist")" "In Queue: $(gum style --foreground "$foreground_queue_count" "$queue_count") of $(gum style --foreground "$foreground_total_queue_count" "$total_queue_count")" "$queue_time"
 }
-
 
 decor() {
     gum style --foreground "$foreground_bold" --bold "$1"

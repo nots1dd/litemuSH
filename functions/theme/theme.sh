@@ -8,6 +8,7 @@ load_theme() {
         foreground_song_name=$(jq -r '.display_colors.foreground_song_name' "$theme_file")
         foreground_artist=$(jq -r '.display_colors.foreground_artist' "$theme_file")
         foreground_album=$(jq -r '.display_colors.foreground_album' "$theme_file")
+        foreground_year=$(jq -r '.display_colors.foreground_year' "$theme_file")
         foreground_duration=$(jq -r '.display_colors.foreground_duration' "$theme_file")
         foreground_next_song_name=$(jq -r '.display_colors.foreground_next_song_name' "$theme_file")
         foreground_next_artist=$(jq -r '.display_colors.foreground_next_artist' "$theme_file")

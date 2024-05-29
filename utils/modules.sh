@@ -19,4 +19,5 @@ source $src/functions/playback/ffplay_index.sh # for ffplay
 source $src/functions/keybinds.sh
 source $src/functions/cache/load_cache.sh
 source $src/functions/cache/save_cache.sh
+source $src/functions/cache/update_cache.sh
 source $src/functions/theme/theme.sh

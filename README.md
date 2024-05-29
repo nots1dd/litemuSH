@@ -56,6 +56,8 @@ Feel free to let me know if there is an issue in any linux distro or not.
 
 In case it DOES NOT work, check the following :
 
+**IT IS HIGHLY RECOMMENDED THAT YOU DOWNLOAD SONGS FROM A SOURCE THAT PROVIDES METADATA (like spotdl), else litemus will not be able to parse it and will give null outputs**
+
 a. If you do not have proper song metadata (might be a random mp3 file), lmus is NOT BUILT to play such media and will bug out in its UX
 
 b. Make sure you have run `install.sh` FIRST before running lmus and are just cloning the repository not using `PKGBUILD`

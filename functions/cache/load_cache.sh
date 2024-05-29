@@ -8,8 +8,8 @@ load_sorted_songs_from_cache() {
     # Map song display names back to full song names
     sorted_song_list=()
     for song_display in "${song_display_list[@]}"; do
-        song_name="$(ls | grep "$song_display")"
-        # full_song="$(echo "$selected_artist") - $(echo "$song_display").mp3"  THIS DOES NOT WORK (works like 95% tho) FOR MULTIPLE ARTISTS AS PER CONVENTION: Artist 1, Artist 2 - SongName.mp3 which $selected_artist does not have in some situations
+        song_name="$(ls | grep "$song_display" | head -n 1)" # it will take the first result from the grep result (in case of conflicting results)
+        # for example, if I want to play Numb (linkin park), the grep will show every case where numb is present in a songs name
         sorted_song_list+=("$song_name")
     done
 }
