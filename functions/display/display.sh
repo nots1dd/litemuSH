@@ -125,25 +125,26 @@ display_help() {
     clear
     display_logo
     help_text="
-1. Show help  '(h)'
-2. Pause/Play  '(p)'
-3. Replay current song  '(r)'
-4. Add a song to queue '(a)'
-5. Display Queue  '(d)'
-6. Next Song  '(n)'
-7. Previous Song  '(b)'
-8. Volume up  '(j)'
-9. Volume down  '(k)'
-10. Check current position  '(c)'
-11. Lyrics  '(l)'
-12. Go back  '(u)'
-13. Kill and go back to menu  '(t)'
-14. Silently go back to menu  '(s)'
-15. Quit  '(q)'
-16. Change song directory  '(x)'
+1. Show help  '($display_help)'
+2. Pause/Play  '($toggle_pause)'
+3. Replay current song  '($restart_song)'
+4. Add a song to queue '($add_song_to_queue)'
+5. Display Queue  '($display_queue)'
+6. Next Song  '($play_next_song)'
+7. Previous Song  '($play_previous_song)'
+8. Volume up  '($increase_volume)'
+9. Volume down  '($decrease_volume)'
+10. Check current position  '($check_current_position)'
+11. Lyrics  '($display_lyrics)'
+12. Go back  '($display_minimal_info)'
+13. Kill and go back to menu  '($return_to_song_selection)'
+14. Silently go back to menu  '($go_back_silently)'
+15. Quit  '($quit)'
+16. Change song directory  '($change_directory)'
+17. Reload theme '($reload_theme)'
 
 $(decor "NOTE :: Capital letters also work")
 "
     gum style --padding "$gum_padding" --border double --border-foreground "$border_foreground_help" "$help_text"
-    gum style --padding "$gum_padding" --border double --border-foreground "$border_foreground_help" "To GO BACK press'u' or 'U'"
+    gum style --padding "$gum_padding" --border double --border-foreground "$border_foreground_help" "To GO BACK press '$(echo $display_minimal_info)'"
 }

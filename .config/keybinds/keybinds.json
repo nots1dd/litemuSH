@@ -1,0 +1,21 @@
+{
+    "keybinds": {
+      "toggle_pause": "p",
+      "return_to_song_selection": "t",
+      "go_back_silently": "s",
+      "play_next_song": "n",
+      "play_previous_song": "b",
+      "quit": "q",
+      "check_current_position": "c",
+      "display_lyrics": "l",
+      "display_minimal_info": "z",
+      "display_help": "h",
+      "increase_volume": "j",
+      "decrease_volume": "k",
+      "add_song_to_queue": "a",
+      "display_queue": "d",
+      "restart_song": "r",
+      "change_directory": "x",
+      "reload_theme": "u"
+    }
+}  

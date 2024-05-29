@@ -74,7 +74,10 @@ At the moment, there is a simple `.config/themes/theme.json` which has my config
 
 -> For more information on how the `theme.json` works, look at `.config/themes/theme_conf.md`
 
-(tip: Pressing `Y` while in player will auto-reload the theme)
+#### Keybinds:
+Similar to themes, there is a `.config/keybinds/keybinds.json` where you can update keybinds as you wish
+
+(tip: While in player, there is a reload_theme && reload_keys keybind `default keybind: u` that will auto_reload BOTH theme and keybinds)
 
 #### DE / WM:
 As I use Hyprland, here are some things I recommend to add to your `hyprland.conf` to get the best out of litemus
@@ -86,6 +89,16 @@ As I use Hyprland, here are some things I recommend to add to your `hyprland.con
 `windowrulev2 = size 50% 90%,class:^(kitty)$,title:^(lmus)$`
 
 For other distros recommendations / integrations that will make litemus look and work amazing, test it out yourself and create a pr
+
+### SPOTDL
+#### Initial Spotdl setup (On `ARCH LINUX`)
+-> Install `python-pipx` AUR package
+
+-> Run `pipx install spotdl`
+
+-> To test spotdl out yourself, run `pipx run spotdl download [song_url]`
+
+-> Note: To ensure if the environment variable for pipx is set to the right path, run `pipx ensurepath`
 
 ### FUTURE
 - [x] Update script to accept characters like `'` and others **[priority/high]**
