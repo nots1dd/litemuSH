@@ -12,7 +12,7 @@
 
 -> jq (to parse json) [AUR PACKAGE]
 
--> Common unix utils like grep, awk, wc
+-> Common unix utils like grep, awk, wc, ,find
 
 ### Features (Currently)
 1. Very light weight (no bloat)
@@ -22,7 +22,7 @@
 5. Ability to add items to queue and play them
 6. Sorting of songs by album, track and disc using metadata (works decently fast, also is cached)
 7. Other modes like `kill and return` and `silent return` and `lyrics view` are also available
-8. Easy **THEME** configuration read `.config/themes/theme_conf.md`
+8. Easy **THEME** configuration read `.config/themes/theme_conf.md` along with **KEYBINDS** config file in `.config/keybinds/keybinds.json` (NOTE: `.config` directory of LMUS not your filesystem)
 9. Cache of songs and other data for faster parsing and efficiency (setup `.cache`)
 
 In terms of watt-hours consumed by the entire process, it was on average **5-8.5m/s** (seen on powertop)
@@ -44,9 +44,7 @@ If you want to install lmus using `PKGBUILD`:
 Since ffmpeg is a vital tool in most operating systems, and smenu can be built in virtually any unix based OS, **building** all the dependencies is not a big issue.
 Feel free to let me know if there is an issue in any linux distro or not.
 
--> Other packages you can just install them using `yay`
-
-NOTE :: You need to have `.mp3` files in your `~/Downloads/Songs` directory at this time. I will soon change this be user defined directory soon.
+-> Other packages you can just install them using `yay` or `paru` (For ARCH LINUX)
 
 -> There is no current plans for expansion of litemus outside linux (will consider macos)
 
@@ -54,17 +52,15 @@ NOTE :: You need to have `.mp3` files in your `~/Downloads/Songs` directory at t
 
 -> After ensuring all dependencies are present in your local machine, you can just clone this repository and run the script `install.sh` which will add an alias to your shell rc
 
--> Then you should be able to run `lmus` anywhere and it will work
+-> Then you should be able to run `lmus` anywhere and it will work (Right now, this install function uses alias to do this, `PKGBUILD` does it a bit better)
 
 In case it DOES NOT work, check the following :
 
-a. In `main.sh` the `$src` and other variables should be the directory where you cloned litemus
+a. If you do not have proper song metadata (might be a random mp3 file), lmus is NOT BUILT to play such media and will bug out in its UX
 
-b. If you do not have proper song metadata (might be a random mp3 file), lmus is NOT BUILT to play such media and will bug out in its UX
+b. Make sure you have run `install.sh` FIRST before running lmus and are just cloning the repository not using `PKGBUILD`
 
-c. Enter the **full directory** in the song directory prompt (tilde `~` does NOT work)
-
-d. Make sure you have run `install.sh` FIRST before running lmus (install script also might be a bit broken, you cannot fully rely on it)
+c. Ensure that you know what you are doing when using `PKGBUILD` as it moves `lmus` script to `/usr/bin`
 
 **NOTE :: YOU SHOULD RUN THIS SCRIPT AT YOUR OWN DISCRETION, BE AWARE OF WHAT THE SCRIPT DOES AND ITS FUNCTIONALITIES BEFORE EXECUTING.**
 
