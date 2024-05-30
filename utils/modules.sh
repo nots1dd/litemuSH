@@ -21,3 +21,4 @@ source $src/functions/cache/load_cache.sh
 source $src/functions/cache/save_cache.sh
 source $src/functions/cache/update_cache.sh
 source $src/functions/theme/theme.sh
+source $src/functions/spotdl/get_song.sh

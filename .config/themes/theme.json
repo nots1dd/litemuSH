@@ -8,6 +8,7 @@
       "foreground_artist": 68,
       "foreground_album": 105,
       "foreground_year": 107,
+      "foreground_genre": 108,
       "foreground_duration": 66,
       "foreground_next_song_name": 24,
       "foreground_next_artist": 25,
@@ -43,6 +44,9 @@
     "song_thumbnail": {
       "width": 24,
       "height": 10
+    },
+    "spotdl": {
+      "header_foreground": 66
     }
   }
   

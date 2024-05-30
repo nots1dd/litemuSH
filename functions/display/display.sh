@@ -87,16 +87,18 @@ display_song_info_minimal() {
 
     # Function to retrieve and cache song metadata
     cache_song_metadata() {
-        song_name=$(echo "$song" | awk -F ' - ' '{ print $2 }' | sed 's/\.mp3//' | tr -d '\n')
+        song_name=$(ffprobe -v quiet -print_format json -show_entries format_tags=title -of default=nw=1:nk=1 "$song")
         artist=$(ffprobe -v quiet -print_format json -show_entries format_tags=artist -of default=nw=1:nk=1 "$song")
         album=$(ffprobe -v quiet -print_format json -show_entries format_tags=album -of default=nw=1:nk=1 "$song")
         year=$(ffprobe -v quiet -print_format json -show_entries format_tags=date -of default=nw=1:nk=1 "$song" | awk -F '-' '{print $1}')
+        genre=$(ffprobe -v quiet -print_format json -show_entries format_tags=genre -of default=nw=1:nk=1 "$song")
 
         # Write metadata to cache file
         echo "$song_name" > "$cache_file"
         echo "$artist" >> "$cache_file"
         echo "$album" >> "$cache_file"
         echo "$year" >> "$cache_file"
+        echo "$genre" >> "$cache_file"
         echo "$duration" >> "$cache_file"
     }
 
@@ -106,7 +108,8 @@ display_song_info_minimal() {
         artist=$(cat "$cache_file" | head -n 2)
         album=$(cat "$cache_file" | head -n 3)
         year=$(cat "$cache_file" | head -n 4)
-        duration=$(cat "$cache_file" | head -n 5)
+        genre=$(cat "$cache_file" | head -n 5)
+        duration=$(cat "$cache_file" | head -n 6)
     else
         cache_song_metadata
     fi
@@ -137,7 +140,7 @@ display_song_info_minimal() {
 
     display_logo
     viu --width "$image_width" --height "$image_height" "$image_dir"
-    gum style --padding "$gum_padding" --border thick --border-foreground "$border_foreground_now_playing" "" "$(gum style --foreground "$foreground_now_playing" "$now_playing_message")" "" "$(gum style --foreground "$foreground_song_name" "$song_name") by $(gum style --foreground "$foreground_artist" "$artist")" "" "Album: $(gum style --foreground "$foreground_album" "$album")" "Year: $(gum style --foreground "$foreground_year" "$year")" "Duration: $(gum style --foreground "$foreground_duration" "$duration")" "Next: $(gum style --foreground "$foreground_next_song_name" "$next_song_name") by $(gum style --foreground "$foreground_next_artist" "$next_artist")" "In Queue: $(gum style --foreground "$foreground_queue_count" "$queue_count") of $(gum style --foreground "$foreground_total_queue_count" "$total_queue_count")" "$queue_time"
+    gum style --padding "$gum_padding" --border thick --border-foreground "$border_foreground_now_playing" "" "$(gum style --foreground "$foreground_now_playing" "$now_playing_message")" "" "$(gum style --foreground "$foreground_song_name" "$song_name") by $(gum style --foreground "$foreground_artist" "$artist")" "" "Album: $(gum style --foreground "$foreground_album" "$album")" "Year: $(gum style --foreground "$foreground_year" "$year")" "Genre: $(gum style --foreground "$foreground_genre" "$genre")" "Duration: $(gum style --foreground "$foreground_duration" "$duration")" "Next: $(gum style --foreground "$foreground_next_song_name" "$next_song_name") by $(gum style --foreground "$foreground_next_artist" "$next_artist")" "In Queue: $(gum style --foreground "$foreground_queue_count" "$queue_count") of $(gum style --foreground "$foreground_total_queue_count" "$total_queue_count")" "$queue_time"
 }
 
 decor() {
@@ -167,6 +170,8 @@ display_help() {
 17. Reload theme '($reload_theme)'
 
 $(decor "NOTE :: Capital letters also work")
+
+FOR SPOTDL USAGE :: pipx and spotdl BOTH should be downloaded
 "
     gum style --padding "$gum_padding" --border double --border-foreground "$border_foreground_help" "$help_text"
     gum style --padding "$gum_padding" --border double --border-foreground "$border_foreground_help" "To GO BACK press '$(echo $display_minimal_info)'"

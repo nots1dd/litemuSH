@@ -3,7 +3,7 @@ load_keybinds() {
     if [ -f "$keybinds_file" ]; then
         toggle_pause=$(jq -r '.keybinds.toggle_pause' "$keybinds_file")
         return_to_song_selection=$(jq -r '.keybinds.return_to_song_selection' "$keybinds_file")
-        go_back_silently=$(jq -r '.keybinds.go_back_silently' "$keybinds_file")
+        download_song=$(jq -r '.keybinds.download_song' "$keybinds_file")
         play_next_song=$(jq -r '.keybinds.play_next_song' "$keybinds_file")
         play_previous_song=$(jq -r '.keybinds.play_previous_song' "$keybinds_file")
         quit=$(jq -r '.keybinds.quit' "$keybinds_file")
@@ -14,6 +14,7 @@ load_keybinds() {
         increase_volume=$(jq -r '.keybinds.increase_volume' "$keybinds_file")
         decrease_volume=$(jq -r '.keybinds.decrease_volume' "$keybinds_file")
         add_song_to_queue=$(jq -r '.keybinds.add_song_to_queue' "$keybinds_file")
+        remove_song_from_queue=$(jq -r '.keybinds.remove_song_from_queue' "$keybinds_file")
         display_queue=$(jq -r '.keybinds.display_queue' "$keybinds_file")
         restart_song=$(jq -r '.keybinds.restart_song' "$keybinds_file")
         change_directory=$(jq -r '.keybinds.change_directory' "$keybinds_file")
@@ -47,9 +48,8 @@ keybinds() {
                 queue=() # empty the queue (t should be pressed as a restart to music session)
                 play
                 ;;
-            $go_back_silently)
-                clear
-                play
+            $download_song) # To be changed to SPOTDL integration
+                get_song
                 ;;
             $play_next_song)
                 ffplay_next_in_queue
@@ -91,12 +91,18 @@ keybinds() {
                 clear
                 queue_func
                 ;;
+            $remove_song_from_queue)
+                clear
+                remove_song_from_queue_func
+                ;;
             $display_queue)
                 clear
                 display_queue
+                status_line=""
                 ;;
             $restart_song)
                 ffrestart_song
+                status_line=""
                 ;;
             $change_directory)
                 kill "$ffplay_pid" >/dev/null 2>&1
@@ -109,7 +115,7 @@ keybinds() {
                 reload_theme && reload_keys
                 display_song_info_minimal "${queue[$current_index]}" "$duration"
                 sleep 0.2
-                status_line="Theme and keybinds reloaded."
+                status_line="${PINK}Theme and keybinds reloaded.${NC}"
                 ;;
             *)
                 continue

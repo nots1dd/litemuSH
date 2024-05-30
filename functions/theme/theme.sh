@@ -9,6 +9,7 @@ load_theme() {
         foreground_artist=$(jq -r '.display_colors.foreground_artist' "$theme_file")
         foreground_album=$(jq -r '.display_colors.foreground_album' "$theme_file")
         foreground_year=$(jq -r '.display_colors.foreground_year' "$theme_file")
+        foreground_genre=$(jq -r '.display_colors.foreground_genre' "$theme_file")
         foreground_duration=$(jq -r '.display_colors.foreground_duration' "$theme_file")
         foreground_next_song_name=$(jq -r '.display_colors.foreground_next_song_name' "$theme_file")
         foreground_next_artist=$(jq -r '.display_colors.foreground_next_artist' "$theme_file")
@@ -38,6 +39,8 @@ load_theme() {
         image_height=$(jq -r '.song_thumbnail.height' "$theme_file")
         # calculate_time_left_in_queue
         show_time_in_queue=$(jq -r '.messages.show_time_in_queue' "$theme_file")
+        # spotdl
+        spotdl_header_foreground=$(jq -r '.spotdl.header_foreground' "$theme_file")
     else
         gum style --border-foreground "$gum_colors_error" "Theme file not found!"
         sleep 0.5

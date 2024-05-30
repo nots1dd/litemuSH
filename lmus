@@ -122,7 +122,7 @@ play() {
             queue=("${sorted_song_list[@]:$selected_index}")
             current_index=0
 
-            ffplay_song_at_index "$current_index"
+            ffplay_song_at_index "$current_index" "true"
         fi
     fi
 }

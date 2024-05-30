@@ -1,6 +1,7 @@
 # Play the song at the given index
 ffplay_song_at_index() {
     local index="$1"
+    local bool="$2"
     if [ "$index" -lt 0 ] || [ "$index" -ge "${#queue[@]}" ]; then
         echo -e "${RED}Invalid song index.${NC}"
         return
@@ -39,7 +40,9 @@ ffplay_song_at_index() {
     duration=$(get_duration "$song")
 
     # Display current song information
-    load_theme "$theme_dir"
+    if [ "$bool" = "true" ]; then # will check and load theme, only the first time lmus is launched
+        load_theme "$theme_dir"
+    fi
     display_song_info_minimal "$song" "$duration"
     time=$(ffprobe -v quiet -print_format json -show_format -show_streams "$song" | jq -r '.format.duration')
     keybinds
@@ -50,7 +53,6 @@ ffplay_song_at_index() {
     if [ "$current_index" -lt "${#queue[@]}" ]; then
         ffplay_song_at_index "$current_index"
     else
-        gum style --padding "$gum_padding" --border double --border-foreground "$gum_colors_error" "End of queue. Returning to song selection."
         sleep 0.3
         play
     fi

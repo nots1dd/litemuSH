@@ -19,7 +19,7 @@
 2. Efficient extraction of a downloaded song's metadata (**thumbnail**, **duration**, **lyrics** and so on)
 3. A basic yet clean tui to interact with thanks to gum
 4. Essential options like Pause, Play, Quit, volume control and player control (prev/next song/restart song) all are implemented
-5. Ability to add items to queue and play them
+5. Basic Queue functionality like add/remove and display
 6. Sorting of songs by album, track and disc using metadata (works decently fast, also is cached)
 7. Other modes like `kill and return` and `silent return` and `lyrics view` are also available
 8. Easy **THEME** configuration read `.config/themes/theme_conf.md` along with **KEYBINDS** config file in `.config/keybinds/keybinds.json` (NOTE: `.config` directory of LMUS not your filesystem)
@@ -98,6 +98,8 @@ For other distros recommendations / integrations that will make litemus look and
 
 -> Note: To ensure if the environment variable for pipx is set to the right path, run `pipx ensurepath`
 
+After you check all if the above works, spotdl should work as intended with litemus
+
 ### FUTURE
 - [x] Update script to accept characters like `'` and others **[priority/high]**
 
@@ -109,6 +111,6 @@ For other distros recommendations / integrations that will make litemus look and
 
 - [x] Previous and Next play should also be implemented **[priority/high]**
 
-- [ ] Integration of spotdl [github](https://github.com/spotDL/spotify-downloader) **[priority/med]**
+- [x] Integration of spotdl [github](https://github.com/spotDL/spotify-downloader) **[priority/med]**
 
 - [ ] Possibly make this an AUR package after all implementations

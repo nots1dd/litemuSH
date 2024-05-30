@@ -2,7 +2,7 @@
     "keybinds": {
       "toggle_pause": "p",
       "return_to_song_selection": "t",
-      "go_back_silently": "s",
+      "download_song": "s",
       "play_next_song": "n",
       "play_previous_song": "b",
       "quit": "q",
@@ -10,12 +10,13 @@
       "display_lyrics": "l",
       "display_minimal_info": "z",
       "display_help": "h",
-      "increase_volume": "j",
-      "decrease_volume": "k",
-      "add_song_to_queue": "a",
+      "increase_volume": "9",
+      "decrease_volume": "0",
+      "add_song_to_queue": "j",
+      "remove_song_from_queue": "k",
       "display_queue": "d",
       "restart_song": "r",
-      "change_directory": "x",
+      "change_directory": "a",
       "reload_theme": "u"
     }
 }  
