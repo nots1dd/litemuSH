@@ -14,6 +14,10 @@
 
 -> Common unix utils like grep, awk, wc, ,find
 
+FOR SPOTDL
+
+-> python-pipx [AUR PACKAGE]
+
 ### Features (Currently)
 1. Very light weight (no bloat)
 2. Efficient extraction of a downloaded song's metadata (**thumbnail**, **duration**, **lyrics** and so on)
@@ -21,9 +25,10 @@
 4. Essential options like Pause, Play, Quit, volume control and player control (prev/next song/restart song) all are implemented
 5. Basic Queue functionality like add/remove and display
 6. Sorting of songs by album, track and disc using metadata (works decently fast, also is cached)
-7. Other modes like `kill and return` and `silent return` and `lyrics view` are also available
-8. Easy **THEME** configuration read `.config/themes/theme_conf.md` along with **KEYBINDS** config file in `.config/keybinds/keybinds.json` (NOTE: `.config` directory of LMUS not your filesystem)
-9. Cache of songs and other data for faster parsing and efficiency (setup `.cache`)
+7. Ability to download songs and instantly see them in lmus thanks to the python module `spotdl` [link](https://github.com/spotDL/spotify-downloade)
+8. Other modes like `kill and return` and `download songs` and `lyrics view` are also available
+9. Easy **THEME** configuration read `.config/themes/theme_conf.md` along with **KEYBINDS** config file in `.config/keybinds/keybinds.json` (NOTE: `.config` directory of LMUS not your filesystem)
+10. Cache of songs and other data for faster parsing and efficiency (setup `.cache`)
 
 In terms of watt-hours consumed by the entire process, it was on average **5-8.5m/s** (seen on powertop)
 ![2024-05-14_17-27-25](https://github.com/nots1dd/litemus/assets/140317709/3293cb4a-cd03-4f4d-a425-c1b2497dcf0b)
