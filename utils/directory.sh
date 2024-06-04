@@ -50,11 +50,37 @@ check_directory() {
         directory=$(cat "$dir_cache")
         if [ -d "$directory" ] && [ "$(find "$directory" -type f -name "*.mp3" | wc -l)" -gt 0 ]; then
             cd "$directory"
+            
+            # Check if all .mp3 files follow the 'Artist - Song.mp3' format
+            invalid_files=$(find . -maxdepth 1 -type f -name "*.mp3" ! -regex "\./[^-]+ - [^/]+\.mp3" | wc -l)
+            if [ "$invalid_files" -gt 0 ]; then
+                gum style --foreground 196 "Some files do not follow the 'Artist - Song.mp3' format. Please correct them and try again."
+                directory_func
+                return
+            fi
+            
+            # Store artist names in a cache file
+            artist_cache="$src/.cache/artists.cache"
+            count_cache="$src/.cache/dircount.cache"
+            mkdir -p "$cache_dir"
+            find . -maxdepth 1 -type f -name "*.mp3" | awk -F ' - ' '{ print substr($1, 3) }' | sort -u > "$artist_cache"
+            dir_song_count=$(ls *.mp3 | wc -l)
+            echo "$dir_song_count" > "$count_cache"
+            
             return
         else
             gum style --foreground 196 "Cached directory '$directory' is invalid or contains no .mp3 files. Please enter a new directory."
         fi
     fi
     directory_func
-    
+}
+
+update_artist_cache() {
+    artist_cache="$src/.cache/artists.cache"
+    count_cache="$src/.cache/dircount.cache"
+    mkdir -p "$cache_dir"
+    find . -maxdepth 1 -type f -name "*.mp3" | awk -F ' - ' '{ print substr($1, 3) }' | sort -u > "$artist_cache"
+    dir_song_count=$(ls *.mp3 | wc -l)
+    echo "$dir_song_count" > "$count_cache"
+    play
 }

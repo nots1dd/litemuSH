@@ -164,7 +164,7 @@ display_help() {
 11. Lyrics  '($display_lyrics)'
 12. Go back  '($display_minimal_info)'
 13. Kill and go back to menu  '($return_to_song_selection)'
-14. Silently go back to menu  '($go_back_silently)'
+14. Download Song  '($download_song)'
 15. Quit  '($quit)'
 16. Change song directory  '($change_directory)'
 17. Reload theme '($reload_theme)'
