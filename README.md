@@ -1,4 +1,4 @@
-# LITEMUS
+# LITEMUS in shell
 ## A light music player written entirely on shell
 
 ### Dependencies
